@@ -39,6 +39,57 @@ def testBrasser():
     assert brasser([0]) == [0]
     assert brasser([]) == []
 
+
+# La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
+# liste contenant toutes les cartes d'un jeu de cartes classique en ordre 
+# croissant en couleur, commençant par le trèfle (C), le carreaux (D), le coeur
+# (H) puis le pique (S). Ce paquet ne contient pas de Jokers. Pour ce faire, 
+# la fonction cycle au travers des quatres couleurs, et leur ajoute les 
+# 'nombres'. De plus, cette fonction ajoute les figures et les as.
+def paquet_cartes ():
+    
+    noms_cartes = []
+    noms_couleurs = ["C", "D", "H", "S"]
+    # Essaie de faire la liste des noms de cartes automatiquement
+    # On a 1 = ace, 11 = valet,
+    for i in range(1, 14):
+        
+        # Cycler au travers des 4 couleurs pour ajouter toutes les possibilités
+        for couleur in noms_couleurs:
+            
+            # Si c'est un as, ajouter A
+            if i == 1:
+                noms_cartes.append('A' + couleur)
+            
+            # Si c'est un valet, ajouter J
+            elif i == 11:
+                noms_cartes.append('J' + couleur)
+            
+            # Si c'est une dame, ajouter Q
+            elif i == 12:
+                noms_cartes.append('Q' + couleur)
+            
+            # Si c'est un roi, ajouter K
+            elif i == 13:
+                noms_cartes.append('K' + couleur)
+                
+            # Si c'est une chiffre normal
+            else:
+                noms_cartes.append(str(i) + couleur)
+    return noms_cartes
+
+
+# Test unitaire de la fonction 'paquet_cartes()'
+def test_paquet_cartes():
+    assert paquet_cartes == ['AC', 'AD', 'AH', 'AS', '2C', '2D', '2H', '2S', 
+                             '3C', '3D', '3H', '3S', '4C', '4D', '4H', '4S',
+                             '5C', '5D', '5H', '5S', '6C', '6D', '6H', '6S',
+                             '7C', '7D', '7H', '7S', '8C', '8D', '8H', '8S',
+                             '9C', '9D', '9H', '9S', '10C', '10D', '10H',
+                             '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
+                             'QS', 'KC', 'KD', 'KH', 'KS']
+
+
 def init():
 
     # changer le contenu HTML de l'élément racine
