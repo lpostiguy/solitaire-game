@@ -119,6 +119,40 @@ def lignes (tab):
 
 def init():
 
+    cartes = [] # Tableau qui contiendra les cardes ordonnées
+
+    # Tableau  ordonnée de toutes les cartes
+    for i in range(52):
+        cartes.append(i)
+    
+    # Cartes brassées
+    cartes_br = brasser(cartes)
+    
+    # Tableau contenant tous les noms des cartes, en ordres croissant et en
+    # couleur
+    noms_cartes = paquet_cartes()
+
+    noms_cartes_br = [] # Paquet brassé avec le noms des cartes
+    
+    # Boucle qui permet de trouver l'élément associé aux noms des cartes
+    # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
+    # 0 est retrouvé dans cartes_br, et son indice est retourné.
+    for i in cartes_br:
+        for k in range(len(noms_cartes)):
+            if k == i:
+
+                index_carte = cartes_br.index(1)
+                
+                # Crée un nouveau tableau mélangé, avec le nom des cartes
+                noms_cartes_br.append(noms_cartes[k])
+    
+    # Création des éléments HTML.
+    # Moyen de faire ça plus efficacement?    
+    ligne1 = lignes(noms_cartes_br[:13])
+    ligne2 = lignes(noms_cartes_br[13:26])
+    ligne3 = lignes(noms_cartes_br[26:39])
+    ligne4 = lignes(noms_cartes_br[39:])
+    
     # changer le contenu HTML de l'élément racine
     racine = document.querySelector("#cb-body")
     racine.innerHTML = """
@@ -130,12 +164,16 @@ def init():
       <div id="jeu">
         <table>
           <tr>
-            <td id="case0"><img src="cards/2S.svg"></td>
-            <td id="case1"><img src="cards/QH.svg"></td>
+            """ + ligne1 + """
           </tr>
           <tr>
-            <td id="case2"><img src="cards/JC.svg"></td>
-            <td id="case3"><img src="cards/10D.svg"></td>
+            """ + ligne2 + """
+          </tr>
+          <tr>
+            """ + ligne3 + """
+          </tr>
+          <tr>
+            """ + ligne4 + """
           </tr>
         </table>
       </div>"""
