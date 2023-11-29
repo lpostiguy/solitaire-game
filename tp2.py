@@ -146,8 +146,8 @@ def init():
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 noms_cartes_br.append(noms_cartes[k])
     
-    # Création des éléments HTML.
-    # Moyen de faire ça plus efficacement?    
+    # Création des éléments HTML. Ces lignes n'ont déjà plus les as
+    # Moyen de faire ça plus efficacement?   
     ligne1 = lignes(noms_cartes_br[:13])
     ligne2 = lignes(noms_cartes_br[13:26])
     ligne3 = lignes(noms_cartes_br[26:39])
