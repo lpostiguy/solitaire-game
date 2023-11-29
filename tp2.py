@@ -90,6 +90,33 @@ def test_paquet_cartes():
                              'QS', 'KC', 'KD', 'KH', 'KS']
 
 
+# La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères 
+# non vide (tab). Elle retourne le code html permettant d'afficher une ligne 
+# d'un tableau HTML de chaque carte. Elle assigne une image à chaque nom 
+# présent dans le tableau (tab). De plus,elle retire les as, les transformant
+# en cases vides.
+def lignes (tab):
+    ligne = ''
+    
+    for i in tab:
+        index = tab.index(i)
+        
+        # Cas où la carte est un as
+        if 'A' in i:
+            ligne += """<td id=case"""+ str(index) + \
+                """><img src="cards/absent.svg"></td>"""
+            continue
+        
+        ligne += """<td id=case"""+ str(index) + """><img src="cards/""" +\
+            i + """.svg"></td>"""
+    print(ligne)
+    return ligne
+
+
+#def testLignes():
+#    assert(['']) == 
+
+
 def init():
 
     # changer le contenu HTML de l'élément racine
