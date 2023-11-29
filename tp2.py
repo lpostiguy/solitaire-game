@@ -181,3 +181,9 @@ def init():
     # changer la couleur de fond de la case 0
     case0 = document.querySelector("#case0")
     case0.setAttribute("style", "background-color: lime")
+
+def testUnitaires():
+    testBrasser()
+#    test_paquet_cartes()
+    
+testUnitaires()
