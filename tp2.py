@@ -185,18 +185,19 @@ def paquet_cartes():
 # même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
 # La fonction retourne ce tableau mélangé
 def brasser(tab):
-    for i in range(len(tab)):
+    tableau = tab.copy()
+    for i in range(len(tableau)):
         # Variable permettant de cycler au travers des éléments du tableau, en
         # partant par la fin.
-        indice_dernier_element = len(tab) - 1 - i
+        indice_dernier_element = len(tableau) - 1 - i
 
         # Choix aléatoire précédant le dernier élément
-        aleatoire = math.floor(random.random() * len(tab) - 1 - i)
+        aleatoire = math.floor(random.random() * len(tableau) - 1 - i)
 
-        temp = tab[indice_dernier_element]
-        tab[indice_dernier_element] = tab[aleatoire]
-        tab[aleatoire] = temp
-    return tab
+        temp = tableau[indice_dernier_element]
+        tableau[indice_dernier_element] = tableau[aleatoire]
+        tableau[aleatoire] = temp
+    return tableau
 
 
 # La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères
