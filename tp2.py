@@ -116,6 +116,7 @@ def lignes (tab):
 #def testLignes():
 #    assert(['']) == 
 
+cartes_br = []
 
 def init():
 
@@ -126,7 +127,10 @@ def init():
         cartes.append(i)
     
     # Cartes brassées
+    global cartes_br
     cartes_br = brasser(cartes)
+    
+    mise_a_jour_affichage(cartes_br, noms_cartes)
     
     # Tableau contenant tous les noms des cartes, en ordres croissant et en
     # couleur
@@ -134,6 +138,26 @@ def init():
 
     noms_cartes_br = [] # Paquet brassé avec le noms des cartes
     
+
+    compteur = brasser_cartes(cartes_br)
+    print(compteur)
+    brasseur = document.querySelector("#brasser")
+    
+    brasseur.innerHTML = '''
+    Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes(cartes_br)">brasser les cartes</button>
+    ''' + str(compteur) + ' fois'
+    # changer la couleur de fond de la case 0
+    case0 = document.querySelector("#case0")
+    case0.setAttribute("style", "background-color: lime")
+
+
+# Permet de faire un nouvelle partie
+
+def nouvelle_partie():
+    init()
+    
+
+def mise_a_jour_affichage(cartes_br, noms_cartes):
     # Boucle qui permet de trouver l'élément associé aux noms des cartes
     # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
     # 0 est retrouvé dans cartes_br, et son indice est retourné.
@@ -177,31 +201,15 @@ def init():
           </tr>
         </table>
       </div>"""
-
-
-    compteur = brasser_cartes(cartes)
-    brasseur = document.querySelector("#brasser")
-    
-    brasseur.innerHTML = '''
-    Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes()">brasser les cartes</button>
-    ''' + str(compteur) + ' fois'
-    # changer la couleur de fond de la case 0
-    case0 = document.querySelector("#case0")
-    case0.setAttribute("style", "background-color: lime")
-
-
-# Permet de faire un nouvelle partie
-
-def nouvelle_partie():
-    init()
     
     
 # TODO: ajouter un compteur
 def brasser_cartes(tab):
     compteur = 4
     compteur -= 1
-    
-    #init()
+    global cartes_br
+    cartes_br = brasser(cartes_br)
+    mise_a_jour_affichage(cartes_br, noms_cartes)
     return compteur
 
 
