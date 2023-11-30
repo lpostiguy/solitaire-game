@@ -302,4 +302,17 @@ noms_cartes_br = ['6D', '5S', '10H', 'AH', '8D', '3H', '2S', 'AD', 'QD', '5C',\
                   '10D', 'KC', '8S', '7C', 'AS', '2C', 'JH', '8C', '5H', 'KH',\
                   '3C', '7S', '5D', '3D', '7D', 'QH', '9H', '4H', '8H', '4D',\
                   '9C', '9S', 'QS']
+
+
+for carte in cartes_br:
+    
+    indexe = cartes_br.index(carte)
+    if carte // 4 == 0: # Si c'est un as
+        carte_avant_as = indexe-1
+        
+        valeur_carte = noms_cartes_br[indexe-1] # valeur de noms_cartes selon l'indexe
+        print('carte devant un as: ',noms_cartes_br[indexe-1])
+        
+        indexe_noms_cartes = noms_cartes.index(valeur_carte) # index de la carte devant l'as dans noms_cartes
+        print('Carte qui doit suivre:',noms_cartes[indexe_noms_cartes+4], '\n')
 '''
