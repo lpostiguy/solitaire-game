@@ -109,7 +109,7 @@ def lignes (tab):
         
         ligne += """<td id=case"""+ str(index) + """><img src="cards/""" +\
             i + """.svg"></td>"""
-    print(ligne)
+    #print(ligne)
     return ligne
 
 
@@ -178,9 +178,32 @@ def init():
         </table>
       </div>"""
 
+
+    compteur = brasser_cartes(cartes)
+    brasseur = document.querySelector("#brasser")
+    
+    brasseur.innerHTML = '''
+    Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes()">brasser les cartes</button>
+    ''' + str(compteur) + ' fois'
     # changer la couleur de fond de la case 0
     case0 = document.querySelector("#case0")
     case0.setAttribute("style", "background-color: lime")
+
+
+# Permet de faire un nouvelle partie
+
+def nouvelle_partie():
+    init()
+    
+    
+# TODO: ajouter un compteur
+def brasser_cartes(tab):
+    compteur = 4
+    compteur -= 1
+    
+    #init()
+    return compteur
+
 
 def testUnitaires():
     testBrasser()
