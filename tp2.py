@@ -87,7 +87,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
     ligne3 = lignes(noms_cartes_br[26:39], 26)
     ligne4 = lignes(noms_cartes_br[39:], 39)
 
-    # changer le contenu HTML de l'élément racine
+    # Changer le contenu HTML de l'élément racine
     racine = document.querySelector("#cb-body")
     racine.innerHTML = (
         """
@@ -144,9 +144,8 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
             + " fois"
         )
 
-    # changer la couleur de fond de la case 0
+    # Changer la couleur de fond de la case 0
     tab = voisins_as(noms_cartes_br, cartes_br)
-    # print(tab)
 
     for i in tab:
         cas = document.querySelector("#case" + str(i))
@@ -162,11 +161,14 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
 def paquet_cartes():
     noms_cartes = []
     noms_couleurs = ["C", "D", "H", "S"]
+    
     # Essaie de faire la liste des noms de cartes automatiquement
     # On a 1 = ace, 11 = valet,
     for i in range(1, 14):
+        
         # Cycler au travers des 4 couleurs pour ajouter toutes les possibilités
         for couleur in noms_couleurs:
+            
             # Si c'est un as, ajouter A
             if i == 1:
                 noms_cartes.append("A" + couleur)
@@ -197,6 +199,7 @@ def paquet_cartes():
 # La fonction retourne ce tableau mélangé
 def brasser(tab):
     tableau = tab.copy()
+    
     for i in range(len(tableau)):
         # Variable permettant de cycler au travers des éléments du tableau, en
         # partant par la fin.
@@ -218,6 +221,8 @@ def brasser(tab):
 # présent dans le tableau (tab). De plus, elle retire les as, les transformant
 # en cases vides.
 def lignes(tab, case):
+    print(tab)
+    print(case)
     ligne = ""
 
     for i in tab:
@@ -235,6 +240,7 @@ def lignes(tab, case):
                 + """.svg"></td>"""
             )
         case += 1  # Ajustement de la case, pour la prochaine
+    print(ligne)
     return ligne
 
 
@@ -257,52 +263,49 @@ def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
     mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
 
 
-# TODO: si un as occupe la case 0, tous les 2 devraient pouvoir s'y déplacer
 def voisins_as(noms_cartes_brasse, cartes_brasse):
     indexe = 0
-    # print(noms_cartes_brasse)
-    # print(cartes_brasse)
 
     # tableau contenant les indices des voisins des as
     indexes_carte_suivante = []
-
+    
+    # Passe à travers toute les cartes du paquets
     for carte in cartes_brasse:
         indexe = trouver_indice(cartes_brasse, carte)
-        if carte // 4 == 0:  # Si c'est un as
+        if carte // 4 == 0:  # Si c'est un AS
             valeur_carte = noms_cartes_brasse[indexe]
             indexe_noms_cartes = noms_cartes.index(valeur_carte)
-            # print("Case vide")
 
             # Si la carte est un roi, continue car rien ne peut suivre cette carte
             if cartes_brasse[indexe - 1] + 4 > 51:
-                # print("I y a un roi avant la case vide")
                 continue
 
-            # Si il y a plusieurs As à la suite de l'autre
+            # Si il y a plusieurs AS à la suite de l'autre
             if cartes_brasse[indexe - 1] // 4 == 0:
-                # print("Il y a plusieurs As à la suite de l'autre")
                 continue
 
-            # Pour que la première case donne la posibilité de mettre la carte 2 et aucune autre carte
+            # Pour que la première case donne la posibilité de mettre toute
+            # les cartes ayant la valeur 2
             if indexe == 0 or indexe == 13 or indexe == 26 or indexe == 39:
                 for deux in range(4, 8):
                     indexes_carte_suivante.append(trouver_indice(cartes_brasse, deux))
 
             else:
-                # Pour que la première case donne la posibilité de mettre la carte 2 et aucune autre carte
-                # valeur de noms_cartes selon l'indexe
+                # Valeur de la carte précédant la case vide (AS)
                 valeur_carte = noms_cartes_brasse[indexe - 1]
 
-                # index de la carte devant l'as dans noms_cartes
+                # Index de la carte devant l'as dans noms_cartes
                 indexe_noms_cartes = trouver_indice(noms_cartes, valeur_carte)
-
-                indice_suivant = trouver_indice(
+                
+                # Index de la carte suivante après la carte qui se trouve avant
+                # la carte vide (AS)
+                index_suivant = trouver_indice(
                     noms_cartes_brasse, noms_cartes[indexe_noms_cartes + 4]
                 )
 
-                # ajouter la carte suivante au tableau qui contient la liste de carte à afficher en vert
-                indexes_carte_suivante.append(indice_suivant)
-    # print(indexes_carte_suivante)
+                # Ajouter la carte suivante au tableau qui contient la
+                # liste de carte à afficher en vert
+                indexes_carte_suivante.append(index_suivant)
     return indexes_carte_suivante
 
 
@@ -310,19 +313,36 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
 # à chercher dans ce tableau (a_trouver). Cet elément doit nécessairement être
 # présent dans le tableau. Cette fonction retourne l'indice de l'élément à
 # chercher.
-
-
 def trouver_indice(tab, a_trouver):
-    for i in range(len(tab)):
-        if tab[i] == a_trouver:
-            return i
+    if len(tab) == 0:
+        return False
+    else:
+        for i in range(len(tab)):
+            if tab[i] == a_trouver:
+                return i
+        return False
 
 
-# Test unitaires ---------------------------------------------
+# Test unitaires ------------------------------------------------------
+
+# Test unitaire de la fonction 'trouver_indice()'
+def test_trouver_indice():
+    # Cas de base
+    assert trouver_indice([1,3,4,6,5], 4) == 2
+    
+    # Cas quand le paramètre a_trouvé
+    # ne fait pas partie de la liste
+    assert trouver_indice([1,2,3,4,5], 8) == False  
+    
+    # Cas quand le tableau est vide
+    assert trouver_indice([0], 8) == False  
+    
+    # Cas quand le tableau ne contient pas d'éléments
+    assert trouver_indice([], 5) == False 
 
 
-# Difficile de faire un test unitaire
-def testBrasser():
+# Test unitaire de la fonction 'brasser()'
+def test_brasser():
     tab = []
     for i in range(52):
         tab.append(i)
@@ -335,7 +355,8 @@ def testBrasser():
 
 # Test unitaire de la fonction 'paquet_cartes()'
 def test_paquet_cartes():
-    assert paquet_cartes == [
+    # Cas de base
+    assert paquet_cartes() == [
         'AC', 'AD', 'AH', 'AS', '2C', '2D', '2H', '2S', 
         '3C', '3D', '3H', '3S', '4C', '4D', '4H', '4S',
         '5C', '5D', '5H', '5S', '6C', '6D', '6H', '6S',
@@ -343,54 +364,23 @@ def test_paquet_cartes():
         '9C', '9D', '9H', '9S', '10C', '10D', '10H',
         '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
         'QS', 'KC', 'KD', 'KH', 'KS']
-"""
-        'AC', 'AD', 'AH', 'AS', '2C', '2D', '2H', '2S', 
-        '3C', '3D', '3H', '3S', '4C', '4D', '4H', '4S',
-        '5C', '5D', '5H', '5S', '6C', '6D', '6H', '6S',
-        '7C', '7D', '7H', '7S', '8C', '8D', '8H', '8S',
-        '9C', '9D', '9H', '9S', '10C', '10D', '10H',
-        '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
-        'QS', 'KC', 'KD', 'KH', 'KS']
-"""
 
+# Test unitaire de la fonction 'lignes()'
+def test_lignes():
+    # Cas de base
+    assert lignes(['JS', '7S', '6S', 'QS', '4C', '8D', '5C',
+                   '9S', '2H', 'AC', '8H', '5D', '10C'], 0) == ("""<td id=case0><img src="cards/JS.svg"></td><td id=case1><img src="cards/7S.svg"></td><td id=case2><img src="cards/6S.svg"></td><td id=case3><img src="cards/QS.svg"></td><td id=case4><img src="cards/4C.svg"></td><td id=case5><img src="cards/8D.svg"></td><td id=case6><img src="cards/5C.svg"></td><td id=case7><img src="cards/9S.svg"></td><td id=case8><img src="cards/2H.svg"></td><td id=case9><img src="cards/absent.svg"></td><td id=case10><img src="cards/8H.svg"></td><td id=case11><img src="cards/5D.svg"></td><td id=case12><img src="cards/10C.svg"></td>""")
 
 # Procédure qui effectue tous les test unitaires du programme.
-def testUnitaires():
-    testBrasser()
-
-
-testUnitaires()
-
-"""
-cartes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,\
-          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,\
-          36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
-cartes_br = [21, 19, 38, 2, 29, 10, 7, 1, 45, 16, 15, 23, 5, 43, 41, 22, 40,\
-             11, 26, 33, 6, 12, 0, 36, 44, 39, 51, 20, 49, 37, 48, 31, 24, 3,\
-             4, 42, 28, 18, 50, 8, 27, 17, 9, 25, 46, 34, 14, 30, 13, 32, 35, 47]
-noms_cartes = ['AC', 'AD', 'AH', 'AS', '2C', '2D', '2H', '2S', '3C', '3D', \
-               '3H', '3S', '4C', '4D', '4H', '4S', '5C', '5D', '5H', '5S', \
-               '6C', '6D', '6H', '6S', '7C', '7D', '7H', '7S', '8C', '8D', \
-               '8H', '8S', '9C', '9D', '9H', '9S', '10C', '10D', '10H', '10S',\
-               'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH', 'QS', 'KC', 'KD',\
-               'KH', 'KS']
-noms_cartes_br = ['6D', '5S', '10H', 'AH', '8D', '3H', '2S', 'AD', 'QD', '5C',\
-                  '4S', '6S', '2D', 'JS', 'JD', '6H', 'JC', '3S', '7H', '9D', \
-                  '2H', '4C', 'AC', '10C', 'QC', '10S', 'KS', '6C', 'KD', \
-                  '10D', 'KC', '8S', '7C', 'AS', '2C', 'JH', '8C', '5H', 'KH',\
-                  '3C', '7S', '5D', '3D', '7D', 'QH', '9H', '4H', '8H', '4D',\
-                  '9C', '9S', 'QS']
-
-
-for carte in cartes_br:
+def test_unitaires():
     
-    indexe = cartes_br.index(carte)
-    if carte // 4 == 0: # Si c'est un as
-        carte_avant_as = indexe-1
-        
-        valeur_carte = noms_cartes_br[indexe-1] # valeur de noms_cartes selon l'indexe
-        print('carte devant un as: ',noms_cartes_br[indexe-1])
-        
-        indexe_noms_cartes = noms_cartes.index(valeur_carte) # index de la carte devant l'as dans noms_cartes
-        print('Carte qui doit suivre:',noms_cartes[indexe_noms_cartes+4], '\n')
-"""
+    test_trouver_indice()
+    
+    test_brasser()
+    
+    test_paquet_cartes()
+    
+    test_lignes()
+
+
+test_unitaires()
