@@ -286,11 +286,8 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
         #indexe = cartes_brasse.index(carte)
         indexe = trouver_indice(cartes_brasse, carte)
         if carte // 4 == 0:  # Si c'est un as
-            valeur_carte = noms_cartes_brasse[indexe] # trouver les as
-            #indexe_noms_cartes = noms_cartes.index(valeur_carte)
-            
-            # indexe des noms dans la liste non brassée
-            indexe_noms_cartes = trouver_indice(noms_cartes, valeur_carte)
+            valeur_carte = noms_cartes_brasse[indexe]
+            indexe_noms_cartes = noms_cartes.index(valeur_carte)
             # print("ligne importante:", cartes_brasse[indexe -1])
             
             # Si la carte est un roi, continue car rien ne peut suivre cette carte
