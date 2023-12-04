@@ -118,7 +118,13 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
         + """
           </tr>
         </table>
-      </div>"""
+      </div>
+          <div id="controles">
+    <div id="brasser">
+    </div>
+    <button id="new-games" onclick="nouvelle_partie()">Nouvelle partie</button>
+  </div>
+      """
     )
     brasseur = document.querySelector("#brasser")
 
@@ -274,7 +280,15 @@ def test_paquet_cartes():
         '9C', '9D', '9H', '9S', '10C', '10D', '10H',
         '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
         'QS', 'KC', 'KD', 'KH', 'KS']
-
+"""
+        'AC', 'AD', 'AH', 'AS', '2C', '2D', '2H', '2S', 
+        '3C', '3D', '3H', '3S', '4C', '4D', '4H', '4S',
+        '5C', '5D', '5H', '5S', '6C', '6D', '6H', '6S',
+        '7C', '7D', '7H', '7S', '8C', '8D', '8H', '8S',
+        '9C', '9D', '9H', '9S', '10C', '10D', '10H',
+        '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
+        'QS', 'KC', 'KD', 'KH', 'KS']
+"""
 
 # Procédure qui effectue tous les test unitaires du programme.
 def testUnitaires():
@@ -283,7 +297,7 @@ def testUnitaires():
 
 testUnitaires()
 
-'''
+"""
 cartes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,\
           19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,\
           36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
@@ -315,4 +329,4 @@ for carte in cartes_br:
         
         indexe_noms_cartes = noms_cartes.index(valeur_carte) # index de la carte devant l'as dans noms_cartes
         print('Carte qui doit suivre:',noms_cartes[indexe_noms_cartes+4], '\n')
-'''
+"""
