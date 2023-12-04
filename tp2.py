@@ -74,7 +74,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
     for i in cartes_br:
         for k in range(len(noms_cartes)):
             if k == i:
-                #index_carte = cartes_br.index(1)
+                # index_carte = cartes_br.index(1)
                 index_carte = trouver_indice(cartes_br, 1)
 
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
@@ -146,11 +146,9 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
 
     # changer la couleur de fond de la case 0
     tab = voisins_as(noms_cartes_br, cartes_br)
-    #print(tab)
+    # print(tab)
 
     for i in tab:
-        #case_verte = cartes_br.index(i)
-        case_verte = trouver_indice(cartes_br, i)
         cas = document.querySelector("#case" + str(i))
         cas.setAttribute("style", "background-color: lime")
 
@@ -222,14 +220,7 @@ def brasser(tab):
 def lignes(tab, case):
     ligne = ""
 
-    # tab_case = [] # Tableau qui contiendra les numéro des cases
-
     for i in tab:
-        # print(i)
-        # for k in range(nb_1, nb_2):
-        #index = tab.index(i)
-        index = trouver_indice(tab, i)
-               
         # Cas où la carte est un as
         if "A" in i:
             ligne += (
@@ -266,84 +257,69 @@ def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
     mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
 
 
-# TODO: Je ne sais pas si on peut utiliser .index
-# Fonction qui donne la carte qui doit suivre.
-
-# TODO: Nouveau cas a regarder:
-# Si la première carte d'une rangé est blanche et qu'il ne faut pas pouvoir
-# avoir la suite de la carte de la rangé précédante.
-
 # TODO: si un as occupe la case 0, tous les 2 devraient pouvoir s'y déplacer
 def voisins_as(noms_cartes_brasse, cartes_brasse):
     indexe = 0
-    #print(noms_cartes_brasse)
-    #print(cartes_brasse)
+    # print(noms_cartes_brasse)
+    # print(cartes_brasse)
 
     # tableau contenant les indices des voisins des as
     indexes_carte_suivante = []
 
     for carte in cartes_brasse:
-        #indexe = cartes_brasse.index(carte)
         indexe = trouver_indice(cartes_brasse, carte)
         if carte // 4 == 0:  # Si c'est un as
             valeur_carte = noms_cartes_brasse[indexe]
             indexe_noms_cartes = noms_cartes.index(valeur_carte)
-            # print("ligne importante:", cartes_brasse[indexe -1])
-            
+            # print("Case vide")
+
             # Si la carte est un roi, continue car rien ne peut suivre cette carte
             if cartes_brasse[indexe - 1] + 4 > 51:
+                # print("I y a un roi avant la case vide")
                 continue
 
-            
-            # TODO: Si il y a 3 ou 4 as à la suite de l'autre. Utiliser plusieurs or et and:
-            # or cartes_brasse[indexe-1] // 4 == 0 and cartes_brasse[indexe-2] // 4 == 0
-            # Pour si il y a plusieurs case vide à la suite de l'autre
-            elif cartes_brasse[indexe - 1] // 4 == 0:
+            # Si il y a plusieurs As à la suite de l'autre
+            if cartes_brasse[indexe - 1] // 4 == 0:
+                # print("Il y a plusieurs As à la suite de l'autre")
                 continue
+
+            # Pour que la première case donne la posibilité de mettre la carte 2 et aucune autre carte
+            if indexe == 0 or indexe == 13 or indexe == 26 or indexe == 39:
+                for deux in range(4, 8):
+                    indexes_carte_suivante.append(trouver_indice(cartes_brasse, deux))
 
             else:
                 # Pour que la première case donne la posibilité de mettre la carte 2 et aucune autre carte
-                if (
-                cartes_brasse[0] // 4 == 0
-                or cartes_brasse[13] // 4 == 0
-                or cartes_brasse[26] // 4 == 0
-                or cartes_brasse[39] // 4 == 0
-                ):
-                    indexes_carte_suivante.append(trouver_indice(
-                        noms_cartes_brasse, noms_cartes[indexe_noms_cartes+4])
-                    #noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes + 4])
-                    
-                )
-                
                 # valeur de noms_cartes selon l'indexe
                 valeur_carte = noms_cartes_brasse[indexe - 1]
 
                 # index de la carte devant l'as dans noms_cartes
-                #indexe_noms_cartes = noms_cartes.index(valeur_carte)
                 indexe_noms_cartes = trouver_indice(noms_cartes, valeur_carte)
 
-                #indice_suivant = noms_cartes_brasse.index(
-                #    noms_cartes[indexe_noms_cartes + 4])
                 indice_suivant = trouver_indice(
-                    noms_cartes_brasse, noms_cartes[indexe_noms_cartes + 4])
+                    noms_cartes_brasse, noms_cartes[indexe_noms_cartes + 4]
+                )
 
                 # ajouter la carte suivante au tableau qui contient la liste de carte à afficher en vert
                 indexes_carte_suivante.append(indice_suivant)
-
+    # print(indexes_carte_suivante)
     return indexes_carte_suivante
+
 
 # La fonction trouver_indice prend en paramètre un tableau (tab) et un élément
 # à chercher dans ce tableau (a_trouver). Cet elément doit nécessairement être
-# présent dans le tableau. Cette fonction retourne l'indice de l'élément à 
+# présent dans le tableau. Cette fonction retourne l'indice de l'élément à
 # chercher.
+
 
 def trouver_indice(tab, a_trouver):
     for i in range(len(tab)):
-        
         if tab[i] == a_trouver:
             return i
 
+
 # Test unitaires ---------------------------------------------
+
 
 # Difficile de faire un test unitaire
 def testBrasser():
