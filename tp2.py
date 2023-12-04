@@ -74,7 +74,8 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
     for i in cartes_br:
         for k in range(len(noms_cartes)):
             if k == i:
-                index_carte = cartes_br.index(1)
+                #index_carte = cartes_br.index(1)
+                index_carte = trouver_indice(cartes_br, 1)
 
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 noms_cartes_br.append(noms_cartes[k])
@@ -148,7 +149,8 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
     #print(tab)
 
     for i in tab:
-        case_verte = cartes_br.index(i)
+        #case_verte = cartes_br.index(i)
+        case_verte = trouver_indice(cartes_br, i)
         cas = document.querySelector("#case" + str(i))
         cas.setAttribute("style", "background-color: lime")
 
@@ -225,7 +227,8 @@ def lignes(tab, case):
     for i in tab:
         # print(i)
         # for k in range(nb_1, nb_2):
-        index = tab.index(i)
+        #index = tab.index(i)
+        index = trouver_indice(tab, i)
                
         # Cas où la carte est un as
         if "A" in i:
@@ -278,10 +281,12 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
     indexes_carte_suivante = []
 
     for carte in cartes_brasse:
-        indexe = cartes_brasse.index(carte)
+        #indexe = cartes_brasse.index(carte)
+        indexe = trouver_indice(cartes_brasse, carte)
         if carte // 4 == 0:  # Si c'est un as
             valeur_carte = noms_cartes_brasse[indexe]
-            indexe_noms_cartes = noms_cartes.index(valeur_carte)
+            #indexe_noms_cartes = noms_cartes.index(valeur_carte)
+            indexe_noms_cartes = trouver_indice(noms_cartes, valeur_carte)
             # print("ligne importante:", cartes_brasse[indexe -1])
 
             # Si la carte est un roi, continue car rien ne peut suivre cette carte
@@ -302,25 +307,39 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
                 or cartes_brasse[26] // 4 == 0
                 or cartes_brasse[39] // 4 == 0
                 ):
-                    indexes_carte_suivante.append(
-                    noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes + 4])
+                    indexes_carte_suivante.append(trouver_indice(
+                        noms_cartes_brasse, noms_cartes[indexe_noms_cartes+4])
+                    #noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes + 4])
+                    
                 )
                 
                 # valeur de noms_cartes selon l'indexe
                 valeur_carte = noms_cartes_brasse[indexe - 1]
 
                 # index de la carte devant l'as dans noms_cartes
-                indexe_noms_cartes = noms_cartes.index(valeur_carte)
+                #indexe_noms_cartes = noms_cartes.index(valeur_carte)
+                indexe_noms_cartes = trouver_indice(noms_cartes, valeur_carte)
 
-                indice_suivant = noms_cartes_brasse.index(
-                    noms_cartes[indexe_noms_cartes + 4]
-                )
+                #indice_suivant = noms_cartes_brasse.index(
+                #    noms_cartes[indexe_noms_cartes + 4])
+                indice_suivant = trouver_indice(
+                    noms_cartes_brasse, noms_cartes[indexe_noms_cartes + 4])
 
                 # ajouter la carte suivante au tableau qui contient la liste de carte à afficher en vert
                 indexes_carte_suivante.append(indice_suivant)
 
     return indexes_carte_suivante
 
+# La fonction trouver_indice prend en paramètre un tableau (tab) et un élément
+# à chercher dans ce tableau (a_trouver). Cet elément doit nécessairement être
+# présent dans le tableau. Cette fonction retourne l'indice de l'élément à 
+# chercher.
+
+def trouver_indice(tab, a_trouver):
+    for i in range(len(tab)):
+        
+        if tab[i] == a_trouver:
+            return i
 
 # Test unitaires ---------------------------------------------
 
