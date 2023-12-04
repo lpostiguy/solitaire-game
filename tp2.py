@@ -81,10 +81,10 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
 
     # Création des éléments HTML. Ces lignes n'ont déjà plus les as
     # Moyen de faire ça plus efficacement?
-    ligne1 = lignes(noms_cartes_br[:13])
-    ligne2 = lignes(noms_cartes_br[13:26])
-    ligne3 = lignes(noms_cartes_br[26:39])
-    ligne4 = lignes(noms_cartes_br[39:])
+    ligne1 = lignes(noms_cartes_br[:13], 0)
+    ligne2 = lignes(noms_cartes_br[13:26], 13)
+    ligne3 = lignes(noms_cartes_br[26:39], 26)
+    ligne4 = lignes(noms_cartes_br[39:], 39)
 
     # changer le contenu HTML de l'élément racine
     racine = document.querySelector("#cb-body")
@@ -138,8 +138,22 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
         )
 
     # changer la couleur de fond de la case 0
-    case0 = document.querySelector("#case0")
-    case0.setAttribute("style", "background-color: lime")
+    #print("premièrement",noms_cartes_br)
+    #print(cartes_br)
+    #print(noms_cartes_br)
+    #print("aaaaa")
+    tab = voisins_as(noms_cartes_br, cartes_br)
+    #print(cartes_br)
+    print(tab)
+    
+    for i in tab:
+        #print(i)
+        case_verte = cartes_br.index(i)
+        #print(case_verte)
+        cas = document.querySelector("#case" + str(i))
+        cas.setAttribute("style", "background-color: lime")
+    #case0 = document.querySelector("#case0")
+    #case0.setAttribute("style", "background-color: lime")
 
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
@@ -201,32 +215,38 @@ def brasser(tab):
 
 
 # La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères
-# non vide (tab). Elle retourne le code html permettant d'afficher une ligne
-# d'un tableau HTML de chaque carte. Elle assigne une image à chaque nom
-# présent dans le tableau (tab). De plus,elle retire les as, les transformant
+# non vide (tab), un entier correspondand à l'indice du premier élément de la 
+# ligne active (case). Elle retourne le code html permettant d'afficher une 
+# ligne d'un tableau HTML de chaque carte. Elle assigne une image à chaque nom
+# présent dans le tableau (tab). De plus, elle retire les as, les transformant
 # en cases vides.
-def lignes(tab):
+def lignes(tab, case):
     ligne = ""
-
+    
+    #tab_case = [] # Tableau qui contiendra les numéro des cases
+    
     for i in tab:
+        #print(i)
+        #for k in range(nb_1, nb_2):
         index = tab.index(i)
-
+        
+        
         # Cas où la carte est un as
         if "A" in i:
             ligne += (
                 """<td id=case"""
-                + str(index)
+                + str(case)
                 + """><img src="cards/absent.svg"></td>"""
             )
-            continue
-
-        ligne += (
-            """<td id=case"""
-            + str(index)
-            + """><img src="cards/"""
-            + i
-            + """.svg"></td>"""
-        )
+        else:
+            ligne += (
+                """<td id=case"""
+                + str(case)
+                + """><img src="cards/"""
+                + i
+                + """.svg"></td>"""
+            )
+        case += 1 # Ajustement de la case, pour la prochaine
     return ligne
 
 
@@ -249,6 +269,56 @@ def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
     mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
 
 
+
+# Fonction qui donne la carte qui doit suivre. 
+# TODO : problème quand l'as est la première carte d'une ligne
+    # (une carte en vert est la carte suivant la denrière de la ligne 
+    # précédente, alors que ça doit être un 2)
+# TODO : problème quand il y a deux as de suite
+    # (donne un 2, puisque le second as suit une as. Mais, devrait 
+    # ne rien donner)
+def voisins_as (noms_cartes_brasse, cartes_brasse):
+    indexe = 0
+    print(noms_cartes_brasse)
+    print(cartes_brasse)
+    #print(cartes_br)
+    #print("noms_cartes_br",noms_cartes_brasse)
+    # tableau contenant les indices des voisins des as
+    indexes_carte_suivante = [] 
+    for carte in cartes_brasse:
+        #print(carte)
+        
+        indexe = cartes_brasse.index(carte)
+        if carte // 4 == 0: # Si c'est un as
+            carte_avant_as = indexe-1
+            #print("index",indexe)
+            # valeur de noms_cartes selon l'indexe
+            valeur_carte = noms_cartes_brasse[indexe-1]
+            #print(valeur_carte) 
+            print('carte devant un as: ',noms_cartes_brasse[indexe-1])
+            
+            # index de la carte devant l'as dans noms_cartes
+            indexe_noms_cartes = noms_cartes.index(valeur_carte) 
+            #print("",noms_cartes[indexe_noms_cartes+4])
+            
+            # Si la carte est un roi, continue car rien ne peut suivre cette carte
+            if indexe_noms_cartes+4 > 51 :
+                #print("C'est un roi\n")
+                continue
+            
+            #print('Carte qui doit suivre:', 
+            #      noms_cartes[indexe_noms_cartes+4], '\n')
+            
+            #indexes_carte_suivante.append(noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
+            #print(noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
+            print("indexe_noms_cartes",indexe_noms_cartes)
+            print("indice de",noms_cartes[indexe_noms_cartes+4], ":", noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
+            
+            indice_suivant = noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4])
+            print("carte suivant",noms_cartes_brasse[indice_suivant], "\n")
+            indexes_carte_suivante.append(noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
+            
+    return indexes_carte_suivante
 # Test unitaires ---------------------------------------------
 
 
