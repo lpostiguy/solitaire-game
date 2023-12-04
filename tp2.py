@@ -144,22 +144,13 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
         )
 
     # changer la couleur de fond de la case 0
-    #print("premièrement",noms_cartes_br)
-    #print(cartes_br)
-    #print(noms_cartes_br)
-    #print("aaaaa")
     tab = voisins_as(noms_cartes_br, cartes_br)
-    #print(cartes_br)
-    print(tab)
-    
+    #print(tab)
+
     for i in tab:
-        #print(i)
         case_verte = cartes_br.index(i)
-        #print(case_verte)
         cas = document.querySelector("#case" + str(i))
         cas.setAttribute("style", "background-color: lime")
-    #case0 = document.querySelector("#case0")
-    #case0.setAttribute("style", "background-color: lime")
 
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
@@ -221,28 +212,25 @@ def brasser(tab):
 
 
 # La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères
-# non vide (tab), un entier correspondand à l'indice du premier élément de la 
-# ligne active (case). Elle retourne le code html permettant d'afficher une 
+# non vide (tab), un entier correspondand à l'indice du premier élément de la
+# ligne active (case). Elle retourne le code html permettant d'afficher une
 # ligne d'un tableau HTML de chaque carte. Elle assigne une image à chaque nom
 # présent dans le tableau (tab). De plus, elle retire les as, les transformant
 # en cases vides.
 def lignes(tab, case):
     ligne = ""
-    
-    #tab_case = [] # Tableau qui contiendra les numéro des cases
-    
+
+    # tab_case = [] # Tableau qui contiendra les numéro des cases
+
     for i in tab:
-        #print(i)
-        #for k in range(nb_1, nb_2):
+        # print(i)
+        # for k in range(nb_1, nb_2):
         index = tab.index(i)
-        
-        
+               
         # Cas où la carte est un as
         if "A" in i:
             ligne += (
-                """<td id=case"""
-                + str(case)
-                + """><img src="cards/absent.svg"></td>"""
+                """<td id=case""" + str(case) + """><img src="cards/absent.svg"></td>"""
             )
         else:
             ligne += (
@@ -252,7 +240,7 @@ def lignes(tab, case):
                 + i
                 + """.svg"></td>"""
             )
-        case += 1 # Ajustement de la case, pour la prochaine
+        case += 1  # Ajustement de la case, pour la prochaine
     return ligne
 
 
@@ -275,58 +263,66 @@ def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
     mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
 
 
+# TODO: Je ne sais pas si on peut utiliser .index
+# Fonction qui donne la carte qui doit suivre.
 
-# Fonction qui donne la carte qui doit suivre. 
-# TODO : problème quand l'as est la première carte d'une ligne
-    # (une carte en vert est la carte suivant la denrière de la ligne 
-    # précédente, alors que ça doit être un 2)
-# TODO : problème quand il y a deux as de suite
-    # (donne un 2, puisque le second as suit une as. Mais, devrait 
-    # ne rien donner)
-def voisins_as (noms_cartes_brasse, cartes_brasse):
+# TODO: Nouveau cas a regarder:
+# Si la première carte d'une rangé est blanche et qu'il ne faut pas pouvoir
+# avoir la suite de la carte de la rangé précédante.
+def voisins_as(noms_cartes_brasse, cartes_brasse):
     indexe = 0
-    print(noms_cartes_brasse)
-    print(cartes_brasse)
-    #print(cartes_br)
-    #print("noms_cartes_br",noms_cartes_brasse)
-    # tableau contenant les indices des voisins des as
-    indexes_carte_suivante = [] 
-    for carte in cartes_brasse:
-        #print(carte)
-        
-        indexe = cartes_brasse.index(carte)
-        if carte // 4 == 0: # Si c'est un as
-            carte_avant_as = indexe-1
-            #print("index",indexe)
-            # valeur de noms_cartes selon l'indexe
-            valeur_carte = noms_cartes_brasse[indexe-1]
-            #print(valeur_carte) 
-            print('carte devant un as: ',noms_cartes_brasse[indexe-1])
-            
-            # index de la carte devant l'as dans noms_cartes
-            indexe_noms_cartes = noms_cartes.index(valeur_carte) 
-            #print("",noms_cartes[indexe_noms_cartes+4])
-            
-            # Si la carte est un roi, continue car rien ne peut suivre cette carte
-            if indexe_noms_cartes+4 > 51 :
-                #print("C'est un roi\n")
-                continue
-            
-            #print('Carte qui doit suivre:', 
-            #      noms_cartes[indexe_noms_cartes+4], '\n')
-            
-            #indexes_carte_suivante.append(noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
-            #print(noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
-            print("indexe_noms_cartes",indexe_noms_cartes)
-            print("indice de",noms_cartes[indexe_noms_cartes+4], ":", noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
-            
-            indice_suivant = noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4])
-            print("carte suivant",noms_cartes_brasse[indice_suivant], "\n")
-            indexes_carte_suivante.append(noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes+4]))
-            
-    return indexes_carte_suivante
-# Test unitaires ---------------------------------------------
+    #print(noms_cartes_brasse)
+    #print(cartes_brasse)
 
+    # tableau contenant les indices des voisins des as
+    indexes_carte_suivante = []
+
+    for carte in cartes_brasse:
+        indexe = cartes_brasse.index(carte)
+        if carte // 4 == 0:  # Si c'est un as
+            valeur_carte = noms_cartes_brasse[indexe]
+            indexe_noms_cartes = noms_cartes.index(valeur_carte)
+            # print("ligne importante:", cartes_brasse[indexe -1])
+
+            # Si la carte est un roi, continue car rien ne peut suivre cette carte
+            if cartes_brasse[indexe - 1] + 4 > 51:
+                continue
+
+            # TODO: Si il y a 3 ou 4 as à la suite de l'autre. Utiliser plusieurs or et and:
+            # or cartes_brasse[indexe-1] // 4 == 0 and cartes_brasse[indexe-2] // 4 == 0
+            # Pour si il y a plusieurs case vide à la suite de l'autre
+            elif cartes_brasse[indexe - 1] // 4 == 0:
+                continue
+
+            else:
+                # Pour que la première case donne la posibilité de mettre la carte 2 et aucune autre carte
+                if (
+                cartes_brasse[0] // 4 == 0
+                or cartes_brasse[13] // 4 == 0
+                or cartes_brasse[26] // 4 == 0
+                or cartes_brasse[39] // 4 == 0
+                ):
+                    indexes_carte_suivante.append(
+                    noms_cartes_brasse.index(noms_cartes[indexe_noms_cartes + 4])
+                )
+                
+                # valeur de noms_cartes selon l'indexe
+                valeur_carte = noms_cartes_brasse[indexe - 1]
+
+                # index de la carte devant l'as dans noms_cartes
+                indexe_noms_cartes = noms_cartes.index(valeur_carte)
+
+                indice_suivant = noms_cartes_brasse.index(
+                    noms_cartes[indexe_noms_cartes + 4]
+                )
+
+                # ajouter la carte suivante au tableau qui contient la liste de carte à afficher en vert
+                indexes_carte_suivante.append(indice_suivant)
+
+    return indexes_carte_suivante
+
+
+# Test unitaires ---------------------------------------------
 
 # Difficile de faire un test unitaire
 def testBrasser():
@@ -359,6 +355,7 @@ def test_paquet_cartes():
         '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
         'QS', 'KC', 'KD', 'KH', 'KS']
 """
+
 
 # Procédure qui effectue tous les test unitaires du programme.
 def testUnitaires():
