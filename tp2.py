@@ -145,11 +145,22 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
         )
 
     # Changer la couleur de fond de la case 0
-    tab = voisins_as(noms_cartes_br, cartes_br)
-
-    for i in tab:
-        cas = document.querySelector("#case" + str(i))
+    
+    # matrice retourne une matrice où les sous-tableaux sont composés de
+    # l'indice 0 qui est l'indice de la carte à mettre en vert, et l'indice
+    # 1 qui est la position où cette carte peut être déplacée.
+    matrice = voisins_as(noms_cartes_br, cartes_br)
+    
+    for i in matrice:
+        
+        # l'indice 0 des sous-tableau de tab contient la carte qui peut
+        # être déplacée, qu'il faut mettre en vert
+        cas = document.querySelector("#case" + str(i[0]))
         cas.setAttribute("style", "background-color: lime")
+        
+        #print(i[1])
+        #endroit = document.querySelector("#case" + str(i[1]))
+        #endroit.setAttribute("style", "background-color: red")
 
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
@@ -221,8 +232,8 @@ def brasser(tab):
 # présent dans le tableau (tab). De plus, elle retire les as, les transformant
 # en cases vides.
 def lignes(tab, case):
-    print(tab)
-    print(case)
+    #print(tab)
+    #print(case)
     ligne = ""
 
     for i in tab:
@@ -240,7 +251,7 @@ def lignes(tab, case):
                 + """.svg"></td>"""
             )
         case += 1  # Ajustement de la case, pour la prochaine
-    print(ligne)
+    #print(ligne)
     return ligne
 
 
@@ -263,6 +274,9 @@ def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
     mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
 
 
+
+# Retourne un tableau contenant en indice 0 la carte qui peut être déplacée
+# et à l'indice 1 la position où elle peut être déplacée. 
 def voisins_as(noms_cartes_brasse, cartes_brasse):
     indexe = 0
 
@@ -275,7 +289,7 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
         if carte // 4 == 0:  # Si c'est un AS
             valeur_carte = noms_cartes_brasse[indexe]
             indexe_noms_cartes = noms_cartes.index(valeur_carte)
-
+            
             # Si la carte est un roi, continue car rien ne peut suivre cette carte
             if cartes_brasse[indexe - 1] + 4 > 51:
                 continue
@@ -288,7 +302,8 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
             # les cartes ayant la valeur 2
             if indexe == 0 or indexe == 13 or indexe == 26 or indexe == 39:
                 for deux in range(4, 8):
-                    indexes_carte_suivante.append(trouver_indice(cartes_brasse, deux))
+                    indexes_carte_suivante.append([trouver_indice
+                                                   (cartes_brasse, deux), indexe])
 
             else:
                 # Valeur de la carte précédant la case vide (AS)
@@ -305,7 +320,8 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
 
                 # Ajouter la carte suivante au tableau qui contient la
                 # liste de carte à afficher en vert
-                indexes_carte_suivante.append(index_suivant)
+                indexes_carte_suivante.append([index_suivant, indexe])
+        
     return indexes_carte_suivante
 
 
