@@ -161,14 +161,12 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
 def paquet_cartes():
     noms_cartes = []
     noms_couleurs = ["C", "D", "H", "S"]
-    
+
     # Essaie de faire la liste des noms de cartes automatiquement
     # On a 1 = ace, 11 = valet,
     for i in range(1, 14):
-        
         # Cycler au travers des 4 couleurs pour ajouter toutes les possibilités
         for couleur in noms_couleurs:
-            
             # Si c'est un as, ajouter A
             if i == 1:
                 noms_cartes.append("A" + couleur)
@@ -199,7 +197,7 @@ def paquet_cartes():
 # La fonction retourne ce tableau mélangé
 def brasser(tab):
     tableau = tab.copy()
-    
+
     for i in range(len(tableau)):
         # Variable permettant de cycler au travers des éléments du tableau, en
         # partant par la fin.
@@ -268,7 +266,7 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
 
     # tableau contenant les indices des voisins des as
     indexes_carte_suivante = []
-    
+
     # Passe à travers toute les cartes du paquets
     for carte in cartes_brasse:
         indexe = trouver_indice(cartes_brasse, carte)
@@ -296,7 +294,7 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
 
                 # Index de la carte devant l'as dans noms_cartes
                 indexe_noms_cartes = trouver_indice(noms_cartes, valeur_carte)
-                
+
                 # Index de la carte suivante après la carte qui se trouve avant
                 # la carte vide (AS)
                 index_suivant = trouver_indice(
@@ -323,22 +321,43 @@ def trouver_indice(tab, a_trouver):
         return False
 
 
+# La fonction en_ordre sert à détecter les eléments (nombre entiers)
+# qui sont croissants et ayant une incrémentation de +1 entre
+# élément du tableau. Les éléments qui sont en ordre sont remplacé par le
+# boléen 'True'.
+# La fonction prend en paramètre un tableau (tab).
+# TODO: Ajouter que le premier elem doit être == 2.
+def en_ordre(tab):
+    ligne_elem_croissant = tab.copy
+    elem_precedant = 0
+    index = 0
+    for elem in tab:
+        if elem == elem_precedant + 1:
+            ligne_elem_croissant.insert(index, 1)
+        else:
+            print(ligne_elem_croissant)
+            return ligne_elem_croissant
+
+        index += 1
+        elem_precedant = elem
+
+
 # Test unitaires ------------------------------------------------------
 
 # Test unitaire de la fonction 'trouver_indice()'
 def test_trouver_indice():
     # Cas de base
-    assert trouver_indice([1,3,4,6,5], 4) == 2
-    
+    assert trouver_indice([1, 3, 4, 6, 5], 4) == 2
+
     # Cas quand le paramètre a_trouvé
     # ne fait pas partie de la liste
-    assert trouver_indice([1,2,3,4,5], 8) == False  
-    
+    assert trouver_indice([1, 2, 3, 4, 5], 8) == False
+
     # Cas quand le tableau est vide
-    assert trouver_indice([0], 8) == False  
-    
+    assert trouver_indice([0], 8) == False
+
     # Cas quand le tableau ne contient pas d'éléments
-    assert trouver_indice([], 5) == False 
+    assert trouver_indice([], 5) == False
 
 
 # Test unitaire de la fonction 'brasser()'
@@ -368,18 +387,22 @@ def test_paquet_cartes():
 # Test unitaire de la fonction 'lignes()'
 def test_lignes():
     # Cas de base
-    assert lignes(['JS', '7S', '6S', 'QS', '4C', '8D', '5C',
-                   '9S', '2H', 'AC', '8H', '5D', '10C'], 0) == ("""<td id=case0><img src="cards/JS.svg"></td><td id=case1><img src="cards/7S.svg"></td><td id=case2><img src="cards/6S.svg"></td><td id=case3><img src="cards/QS.svg"></td><td id=case4><img src="cards/4C.svg"></td><td id=case5><img src="cards/8D.svg"></td><td id=case6><img src="cards/5C.svg"></td><td id=case7><img src="cards/9S.svg"></td><td id=case8><img src="cards/2H.svg"></td><td id=case9><img src="cards/absent.svg"></td><td id=case10><img src="cards/8H.svg"></td><td id=case11><img src="cards/5D.svg"></td><td id=case12><img src="cards/10C.svg"></td>""")
+    assert lignes(
+        ["JS", "7S", "6S", "QS", "4C", "8D", "5C", "9S", "2H", "AC", "8H", "5D", "10C"],
+        0,
+    ) == (
+        """<td id=case0><img src="cards/JS.svg"></td><td id=case1><img src="cards/7S.svg"></td><td id=case2><img src="cards/6S.svg"></td><td id=case3><img src="cards/QS.svg"></td><td id=case4><img src="cards/4C.svg"></td><td id=case5><img src="cards/8D.svg"></td><td id=case6><img src="cards/5C.svg"></td><td id=case7><img src="cards/9S.svg"></td><td id=case8><img src="cards/2H.svg"></td><td id=case9><img src="cards/absent.svg"></td><td id=case10><img src="cards/8H.svg"></td><td id=case11><img src="cards/5D.svg"></td><td id=case12><img src="cards/10C.svg"></td>"""
+    )
+
 
 # Procédure qui effectue tous les test unitaires du programme.
 def test_unitaires():
-    
     test_trouver_indice()
-    
+
     test_brasser()
-    
+
     test_paquet_cartes()
-    
+
     test_lignes()
 
 
