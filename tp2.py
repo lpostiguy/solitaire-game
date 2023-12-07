@@ -47,13 +47,12 @@ def init():
     for i in cartes_br:
         for k in range(len(noms_cartes)):
             if k == i:
-                # index_carte = cartes_br.index(1)
-                index_carte = trouver_indice(cartes_br, 1)
 
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 noms_cartes_br.append(noms_cartes[k])
+    
     # Met à jour le contenu de la page HTML
-    mise_a_jour_affichage(cartes_br, noms_cartes_br)
+    mise_a_jour_affichage()
 
 
 # Procédure qui met à jour le contenu HTML de la page web.
@@ -61,7 +60,7 @@ def init():
 # brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
-def mise_a_jour_affichage(cartes_br, noms_cartes_br):
+def mise_a_jour_affichage():
 
     # Paquet brassé avec le noms des cartes
     noms_cartes_br = []
@@ -72,8 +71,6 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
     for i in cartes_br:
         for k in range(len(noms_cartes)):
             if k == i:
-                # index_carte = cartes_br.index(1)
-                index_carte = trouver_indice(cartes_br, 1)
 
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 noms_cartes_br.append(noms_cartes[k])
@@ -138,7 +135,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
     else:
         brasseur.innerHTML = (
             """
-        Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes(cartes_br, noms_cartes, noms_cartes_br)">
+        Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes()">
         brasser les cartes</button>
         """
             + str(brasse_restant)
@@ -155,44 +152,35 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
     # TODO: en plus de les afficher en vert, il faut ajouter la fonction clic()
     # aux cartes pouvant être déplacées
     for i in matrice:
-        # l'indice 0 des sous-tableau de tab contient la carte qui peut
+        
+        # L'indice 0 des sous-tableau de tab contient la carte qui peut
         # être déplacée, qu'il faut mettre en vert
         cas = document.querySelector("#case" + str(i[0]))
         cas.setAttribute("style", "background-color: lime")
 
-        # print(i[1])
-        endroit = document.querySelector("#case" + str(i[1]))
-        endroit.setAttribute("style", "background-color: red")
-
-        tab = i
+        # Ligne de la matrice contenant l'indice de la case qui peut être 
+        # bougée et l'indice de l'endroit où elle peut être déplacée
+        cases = i 
+        
         cas.setAttribute(
             "onclick",
             "bouger("
-            + str(tab[0])
+            + str(cases[0])
             + ","
-            + str(tab[1])
-            + ", noms_cartes, noms_cartes_br)",
+            + str(cases[1])
+            + ")",
         )
-        # cas.innerHTML = """<td id=case"""+ str(99)+ """><img src="cards/"""+i + """.svg"></td>"""
-    print("**MISEÀJOUR*******", cartes_br)
-    att()
 
-def att():
-    print("yehaaaaaaaa",cartes_br)
+
 # Fonction pour bouger une carte. Destination = l'indice où la carte
 # peut aller.
 
-# TODO : on brasser 2 fois cartes_br...Les noms_cartes_br et cartes_br
-# globaux sont différents de l'affichage...
-# Les cartes ne devrait peut-être pas re-brassées dans mise_a_jour?
-
-# TODO : Réactualiser le tableau après avoir bougé une carte
-def bouger(origine, destination, noms_cartes, noms_cartes_br):
+def bouger(origine, destination):
     temp = cartes_br[origine]
     cartes_br[origine] = cartes_br[destination]
     cartes_br[destination] = temp
 
-    mise_a_jour_affichage(cartes_br, noms_cartes_br)
+    mise_a_jour_affichage()
 
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
@@ -238,8 +226,7 @@ def paquet_cartes():
 # tableau et échangeons le avec un élément aléatoire le précédant. Puis,
 # même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
 # La fonction retourne ce tableau mélangé
-def brasser(tab):
-    tableau = tab
+def brasser(tableau):
 
     for i in range(len(tableau)):
         # Variable permettant de cycler au travers des éléments du tableau, en
@@ -291,18 +278,17 @@ def lignes(tab, case):
 # brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
-def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
-    print("ON BRASSE")
+def brasser_cartes():
     global brasse_restant
 
     # Décrémente le nombre de brassé restant au joueur
     brasse_restant -= 1
 
     # Brasse les cartes
-    cartes_brasse = brasser(cartes_br)
+    brasser(cartes_br)
 
     # Met à jour le contenu de la page HTML
-    mise_a_jour_affichage(cartes_brasse, noms_cartes_br)
+    mise_a_jour_affichage()
 
 
 # Retourne un tableau contenant en indice 0 la carte qui peut être déplacée
@@ -375,7 +361,7 @@ def trouver_indice(tab, a_trouver):
 # élément du tableau. Les éléments qui sont en ordre sont remplacé par le
 # boléen 'True'.
 # La fonction prend en paramètre un tableau (tab).
-# TODO: Ajouter que le premier elem doit être == 2.
+
 def en_ordre(tab):
     ligne_elem_croissant = tab.copy
     elem_precedant = 0
