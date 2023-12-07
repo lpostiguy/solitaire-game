@@ -47,13 +47,12 @@ def init():
     for i in cartes_br:
         for k in range(len(noms_cartes)):
             if k == i:
-                # index_carte = cartes_br.index(1)
-                index_carte = trouver_indice(cartes_br, 1)
 
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 noms_cartes_br.append(noms_cartes[k])
+    
     # Met à jour le contenu de la page HTML
-    mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
+    mise_a_jour_affichage()
 
 
 # Procédure qui met à jour le contenu HTML de la page web.
@@ -61,27 +60,10 @@ def init():
 # brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
-def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
-    # Tableau qui contiendra les cardes ordonnées
-    
-    # *************************************************************************
-    
-    cartes = []
-
-    # Tableau  ordonnée de toutes les cartes
-    for i in range(52):
-        cartes.append(i)
-
-    # Cartes brassées
-    #cartes_br = brasser(cartes)
-
-    # Tableau contenant tous les noms des cartes, en ordres croissant et en
-    # couleur
-    noms_cartes = paquet_cartes()
+def mise_a_jour_affichage():
 
     # Paquet brassé avec le noms des cartes
     noms_cartes_br = []
-    
 
     # Boucle qui permet de trouver l'élément associé aux noms des cartes
     # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
@@ -89,13 +71,13 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
     for i in cartes_br:
         for k in range(len(noms_cartes)):
             if k == i:
-                # index_carte = cartes_br.index(1)
-                index_carte = trouver_indice(cartes_br, 1)
 
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 noms_cartes_br.append(noms_cartes[k])
-    # *************************************************************************
     
+    
+    # Tableau qui contiendra les cardes ordonnées
+
     # Création des éléments HTML. Ces lignes n'ont déjà plus les as
     # Moyen de faire ça plus efficacement?
     ligne1 = lignes(noms_cartes_br[:13], 0)
@@ -144,7 +126,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
       """
     )
     brasseur = document.querySelector("#brasser")
-    
+
     # Si le joueur n'à plus de brassage de cartes restant
     if brasse_restant == 0:
         brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
@@ -153,7 +135,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
     else:
         brasseur.innerHTML = (
             """
-        Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes(cartes_br, noms_cartes, noms_cartes_br)">
+        Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes()">
         brasser les cartes</button>
         """
             + str(brasse_restant)
@@ -161,62 +143,45 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
         )
 
     # Changer la couleur de fond de la case 0
-    
+
     # matrice retourne une matrice où les sous-tableaux sont composés de
     # l'indice 0 qui est l'indice de la carte à mettre en vert, et l'indice
     # 1 qui est la position où cette carte peut être déplacée.
-    matrice = voisins_as(noms_cartes_br, cartes_br)
-    
+    matrice = voisins_as(noms_cartes_br)
+
     # TODO: en plus de les afficher en vert, il faut ajouter la fonction clic()
     # aux cartes pouvant être déplacées
     for i in matrice:
         
-        # l'indice 0 des sous-tableau de tab contient la carte qui peut
+        # L'indice 0 des sous-tableau de tab contient la carte qui peut
         # être déplacée, qu'il faut mettre en vert
         cas = document.querySelector("#case" + str(i[0]))
         cas.setAttribute("style", "background-color: lime")
+
+        # Ligne de la matrice contenant l'indice de la case qui peut être 
+        # bougée et l'indice de l'endroit où elle peut être déplacée
+        cases = i 
         
-        #print(i[1])
-        endroit = document.querySelector("#case" + str(i[1]))
-        endroit.setAttribute("style", "background-color: red")
-        
-        #cas.innerHTML = '''<div onclick="bouger()" >'''
-        tab = i
-        cas.setAttribute("onclick", "bouger("+str(tab[0])+','+str(tab[1])+")")
-        #cas.innerHTML = """<td id=case"""+ str(99)+ """><img src="cards/"""+i + """.svg"></td>"""
-    print('*********',cartes_br)
+        cas.setAttribute(
+            "onclick",
+            "bouger("
+            + str(cases[0])
+            + ","
+            + str(cases[1])
+            + ")",
+        )
 
 
-# Fonction pour bouger une carte. Destination = l'indice où la carte 
+# Fonction pour bouger une carte. Destination = l'indice où la carte
 # peut aller.
 
-# TODO : on brasser 2 fois cartes_br...Les noms_cartes_br et cartes_br 
-# globaux sont différents de l'affichage...
-# Les cartes ne devrait peut-être pas re-brassées dans mise_a_jour?
-
-# TODO : Réactualiser le tableau après avoir bougé une carte
-
 def bouger(origine, destination):
-    
-    # Les noms_cartes_br et cartes_br globaux sont différents de l'affichage...
-    #print(noms_cartes_br). Les cartes ne devrait peut-être pas re-brassées
-    # dans mise_a_jour?
-    #print(cartes_br, '\n')
-    
-    #print(origine, destination)
-    
-    #Échanger les 2 cartes
-    m = trouver_indice(cartes_br, origine)
-    p = trouver_indice(cartes_br, destination)
-    
-    temp = cartes_br[m]
-    cartes_br[m] = cartes_br[p]
-    cartes_br[p] = temp
-    
-    #print(cartes_br)
-    #print('\n')
-    mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
-    
+    temp = cartes_br[origine]
+    cartes_br[origine] = cartes_br[destination]
+    cartes_br[destination] = temp
+
+    mise_a_jour_affichage()
+
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
 # liste contenant toutes les cartes d'un jeu de cartes classique en ordre
@@ -261,8 +226,7 @@ def paquet_cartes():
 # tableau et échangeons le avec un élément aléatoire le précédant. Puis,
 # même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
 # La fonction retourne ce tableau mélangé
-def brasser(tab):
-    tableau = tab.copy()
+def brasser(tableau):
 
     for i in range(len(tableau)):
         # Variable permettant de cycler au travers des éléments du tableau, en
@@ -285,8 +249,8 @@ def brasser(tab):
 # présent dans le tableau (tab). De plus, elle retire les as, les transformant
 # en cases vides.
 def lignes(tab, case):
-    #print(tab)
-    #print(case)
+    # print(tab)
+    # print(case)
     ligne = ""
 
     for i in tab:
@@ -304,7 +268,7 @@ def lignes(tab, case):
                 + """.svg"></td>"""
             )
         case += 1  # Ajustement de la case, pour la prochaine
-    #print(ligne)
+    # print(ligne)
     return ligne
 
 
@@ -314,49 +278,49 @@ def lignes(tab, case):
 # brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
-def brasser_cartes(cartes_bra, noms_cartes, noms_cartes_br):
+def brasser_cartes():
     global brasse_restant
 
     # Décrémente le nombre de brassé restant au joueur
     brasse_restant -= 1
 
     # Brasse les cartes
-    cartes_brasse = brasser(cartes_bra)
+    brasser(cartes_br)
 
     # Met à jour le contenu de la page HTML
-    mise_a_jour_affichage(cartes_brasse, noms_cartes, noms_cartes_br)
-
+    mise_a_jour_affichage()
 
 
 # Retourne un tableau contenant en indice 0 la carte qui peut être déplacée
-# et à l'indice 1 la position où elle peut être déplacée. 
-def voisins_as(noms_cartes_brasse, cartes_brasse):
+# et à l'indice 1 la position où elle peut être déplacée.
+def voisins_as(noms_cartes_brasse):
     indexe = 0
 
     # tableau contenant les indices des voisins des as
     indexes_carte_suivante = []
 
     # Passe à travers toute les cartes du paquets
-    for carte in cartes_brasse:
-        indexe = trouver_indice(cartes_brasse, carte)
+    for carte in cartes_br:
+        indexe = trouver_indice(cartes_br, carte)
         if carte // 4 == 0:  # Si c'est un AS
             valeur_carte = noms_cartes_brasse[indexe]
             indexe_noms_cartes = noms_cartes.index(valeur_carte)
-            
+
             # Si la carte est un roi, continue car rien ne peut suivre cette carte
-            if cartes_brasse[indexe - 1] + 4 > 51:
+            if cartes_br[indexe - 1] + 4 > 51:
                 continue
 
             # Si il y a plusieurs AS à la suite de l'autre
-            if cartes_brasse[indexe - 1] // 4 == 0:
+            if cartes_br[indexe - 1] // 4 == 0:
                 continue
 
             # Pour que la première case donne la posibilité de mettre toute
             # les cartes ayant la valeur 2
             if indexe == 0 or indexe == 13 or indexe == 26 or indexe == 39:
                 for deux in range(4, 8):
-                    indexes_carte_suivante.append([trouver_indice
-                                                   (cartes_brasse, deux), indexe])
+                    indexes_carte_suivante.append(
+                        [trouver_indice(cartes_br, deux), indexe]
+                    )
 
             else:
                 # Valeur de la carte précédant la case vide (AS)
@@ -374,7 +338,7 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
                 # Ajouter la carte suivante au tableau qui contient la
                 # liste de carte à afficher en vert
                 indexes_carte_suivante.append([index_suivant, indexe])
-        
+
     return indexes_carte_suivante
 
 
@@ -397,7 +361,7 @@ def trouver_indice(tab, a_trouver):
 # élément du tableau. Les éléments qui sont en ordre sont remplacé par le
 # boléen 'True'.
 # La fonction prend en paramètre un tableau (tab).
-# TODO: Ajouter que le premier elem doit être == 2.
+
 def en_ordre(tab):
     ligne_elem_croissant = tab.copy
     elem_precedant = 0
@@ -414,6 +378,7 @@ def en_ordre(tab):
 
 
 # Test unitaires ------------------------------------------------------
+
 
 # Test unitaire de la fonction 'trouver_indice()'
 def test_trouver_indice():
