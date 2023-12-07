@@ -150,7 +150,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
     # matrice retourne une matrice où les sous-tableaux sont composés de
     # l'indice 0 qui est l'indice de la carte à mettre en vert, et l'indice
     # 1 qui est la position où cette carte peut être déplacée.
-    matrice = voisins_as(noms_cartes_br, cartes_br)
+    matrice = voisins_as(noms_cartes_br)
 
     # TODO: en plus de les afficher en vert, il faut ajouter la fonction clic()
     # aux cartes pouvant être déplacées
@@ -171,12 +171,14 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
             + str(tab[0])
             + ","
             + str(tab[1])
-            + ", noms_cartes, noms_cartes_br, cartes_br)",
+            + ", noms_cartes, noms_cartes_br)",
         )
         # cas.innerHTML = """<td id=case"""+ str(99)+ """><img src="cards/"""+i + """.svg"></td>"""
     print("**MISEÀJOUR*******", cartes_br)
+    att()
 
-
+def att():
+    print("yehaaaaaaaa",cartes_br)
 # Fonction pour bouger une carte. Destination = l'indice où la carte
 # peut aller.
 
@@ -185,7 +187,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
 # Les cartes ne devrait peut-être pas re-brassées dans mise_a_jour?
 
 # TODO : Réactualiser le tableau après avoir bougé une carte
-def bouger(origine, destination, noms_cartes, noms_cartes_br, cartes_br):
+def bouger(origine, destination, noms_cartes, noms_cartes_br):
     temp = cartes_br[origine]
     cartes_br[origine] = cartes_br[destination]
     cartes_br[destination] = temp
@@ -237,7 +239,7 @@ def paquet_cartes():
 # même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
 # La fonction retourne ce tableau mélangé
 def brasser(tab):
-    tableau = tab.copy()
+    tableau = tab
 
     for i in range(len(tableau)):
         # Variable permettant de cycler au travers des éléments du tableau, en
@@ -290,6 +292,7 @@ def lignes(tab, case):
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
 def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
+    print("ON BRASSE")
     global brasse_restant
 
     # Décrémente le nombre de brassé restant au joueur
@@ -304,25 +307,25 @@ def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
 
 # Retourne un tableau contenant en indice 0 la carte qui peut être déplacée
 # et à l'indice 1 la position où elle peut être déplacée.
-def voisins_as(noms_cartes_brasse, cartes_brasse):
+def voisins_as(noms_cartes_brasse):
     indexe = 0
 
     # tableau contenant les indices des voisins des as
     indexes_carte_suivante = []
 
     # Passe à travers toute les cartes du paquets
-    for carte in cartes_brasse:
-        indexe = trouver_indice(cartes_brasse, carte)
+    for carte in cartes_br:
+        indexe = trouver_indice(cartes_br, carte)
         if carte // 4 == 0:  # Si c'est un AS
             valeur_carte = noms_cartes_brasse[indexe]
             indexe_noms_cartes = noms_cartes.index(valeur_carte)
 
             # Si la carte est un roi, continue car rien ne peut suivre cette carte
-            if cartes_brasse[indexe - 1] + 4 > 51:
+            if cartes_br[indexe - 1] + 4 > 51:
                 continue
 
             # Si il y a plusieurs AS à la suite de l'autre
-            if cartes_brasse[indexe - 1] // 4 == 0:
+            if cartes_br[indexe - 1] // 4 == 0:
                 continue
 
             # Pour que la première case donne la posibilité de mettre toute
@@ -330,7 +333,7 @@ def voisins_as(noms_cartes_brasse, cartes_brasse):
             if indexe == 0 or indexe == 13 or indexe == 26 or indexe == 39:
                 for deux in range(4, 8):
                     indexes_carte_suivante.append(
-                        [trouver_indice(cartes_brasse, deux), indexe]
+                        [trouver_indice(cartes_br, deux), indexe]
                     )
 
             else:
