@@ -284,9 +284,16 @@ def brasser_cartes():
     # Décrémente le nombre de brassé restant au joueur
     brasse_restant -= 1
 
+    en_ordre(cartes_br[:13])
+    en_ordre(cartes_br[13:26])
+    en_ordre(cartes_br[26:39])
+    en_ordre(cartes_br[39:])
+    
     # Brasse les cartes
     brasser(cartes_br)
 
+    
+    
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
 
@@ -363,19 +370,19 @@ def trouver_indice(tab, a_trouver):
 # La fonction prend en paramètre un tableau (tab).
 
 def en_ordre(tab):
-    ligne_elem_croissant = tab.copy
+    ligne_elem_croissant = tab.copy()
+    
     elem_precedant = 0
     index = 0
     for elem in tab:
-        if elem == elem_precedant + 1:
+        if elem == elem_precedant + 4:
+            ligne_elem_croissant.insert(index-1, 1)
             ligne_elem_croissant.insert(index, 1)
-        else:
-            print(ligne_elem_croissant)
-            return ligne_elem_croissant
-
+            
         index += 1
         elem_precedant = elem
-
+    print(ligne_elem_croissant)
+    return ligne_elem_croissant
 
 # Test unitaires ------------------------------------------------------
 
