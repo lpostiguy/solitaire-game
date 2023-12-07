@@ -177,122 +177,6 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
     print("**MISEÀJOUR*******", cartes_br)
 
 
-def mise_a_jour_affichage_test(cartes_br, noms_cartes, noms_cartes_br):
-    
-    print('misejourtest')
-    
-    # Boucle qui permet de trouver l'élément associé aux noms des cartes
-    # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
-    # 0 est retrouvé dans cartes_br, et son indice est retourné.
-    
-    noms_cartes_br = []
-    
-    for i in cartes_br:
-        for k in range(len(noms_cartes)):
-            if k == i:
-                # index_carte = cartes_br.index(1)
-                index_carte = trouver_indice(cartes_br, 1)
-
-                # Crée un nouveau tableau mélangé, avec le nom des cartes
-                noms_cartes_br.append(noms_cartes[k])
-    
-    
-    # Création des éléments HTML. Ces lignes n'ont déjà plus les as
-    # Moyen de faire ça plus efficacement?
-    ligne1 = lignes(noms_cartes_br[:13], 0)
-    ligne2 = lignes(noms_cartes_br[13:26], 13)
-    ligne3 = lignes(noms_cartes_br[26:39], 26)
-    ligne4 = lignes(noms_cartes_br[39:], 39)
-
-    # Changer le contenu HTML de l'élément racine
-    racine = document.querySelector("#cb-body")
-    racine.innerHTML = (
-        """
-      <style>
-        #jeu table { float:none; }
-        #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
-        #jeu table td img { height:140px; }
-      </style>
-      <div id="jeu">
-        <table>
-          <tr>
-            """
-        + ligne1
-        + """
-          </tr>
-          <tr>
-            """
-        + ligne2
-        + """
-          </tr>
-          <tr>
-            """
-        + ligne3
-        + """
-          </tr>
-          <tr>
-            """
-        + ligne4
-        + """
-          </tr>
-        </table>
-      </div>
-          <div id="controles">
-    <div id="brasser">
-    </div>
-    <button id="new-games" onclick="nouvelle_partie()">Nouvelle partie</button>
-  </div>
-      """
-    )
-    brasseur = document.querySelector("#brasser")
-
-    # Si le joueur n'à plus de brassage de cartes restant
-    if brasse_restant == 0:
-        brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
-
-    # Si le joueur à encore des brassages de cartes restant
-    else:
-        brasseur.innerHTML = (
-            """
-        Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes(cartes_br, noms_cartes, noms_cartes_br)">
-        brasser les cartes</button>
-        """
-            + str(brasse_restant)
-            + " fois"
-        )
-
-    # Changer la couleur de fond de la case 0
-
-    # matrice retourne une matrice où les sous-tableaux sont composés de
-    # l'indice 0 qui est l'indice de la carte à mettre en vert, et l'indice
-    # 1 qui est la position où cette carte peut être déplacée.
-    matrice = voisins_as(noms_cartes_br, cartes_br)
-
-    # TODO: en plus de les afficher en vert, il faut ajouter la fonction clic()
-    # aux cartes pouvant être déplacées
-    for i in matrice:
-        # l'indice 0 des sous-tableau de tab contient la carte qui peut
-        # être déplacée, qu'il faut mettre en vert
-        cas = document.querySelector("#case" + str(i[0]))
-        cas.setAttribute("style", "background-color: lime")
-
-        # print(i[1])
-        endroit = document.querySelector("#case" + str(i[1]))
-        endroit.setAttribute("style", "background-color: red")
-        #print(i)
-        tab = i
-        cas.setAttribute(
-            "onclick",
-            "bouger("
-            + str(tab[0])
-            + ","
-            + str(tab[1])
-            + ", noms_cartes, noms_cartes_br, cartes_br)",
-        )
-        # cas.innerHTML = """<td id=case"""+ str(99)+ """><img src="cards/"""+i + """.svg"></td>"""
-    print("*********", cartes_br)
-
-
 # Fonction pour bouger une carte. Destination = l'indice où la carte
 # peut aller.
 
@@ -306,7 +190,7 @@ def bouger(origine, destination, noms_cartes, noms_cartes_br, cartes_br):
     cartes_br[origine] = cartes_br[destination]
     cartes_br[destination] = temp
 
-    mise_a_jour_affichage_test(cartes_br, noms_cartes, noms_cartes_br)
+    mise_a_jour_affichage(cartes_br, noms_cartes_br)
 
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
