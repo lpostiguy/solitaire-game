@@ -280,19 +280,63 @@ def lignes(tab, case):
 # le noms_des cartes brassées.
 def brasser_cartes():
     global brasse_restant
+    global cartes_br
 
     # Décrémente le nombre de brassé restant au joueur
     brasse_restant -= 1
+    # print(cartes_br)
 
-    en_ordre(cartes_br[:13])
-    en_ordre(cartes_br[13:26])
-    en_ordre(cartes_br[26:39])
-    en_ordre(cartes_br[39:])
+    cart = en_ordre(cartes_br[:13])
+    ligne2 = en_ordre(cartes_br[13:26])
+    ligne3 = en_ordre(cartes_br[26:39])
+    ligne4 = en_ordre(cartes_br[39:])
+
+    for i in ligne2:
+        cart.append(i)
+    for i in ligne3:
+        cart.append(i)
+    for i in ligne4:
+        cart.append(i)
+
+    cartes_br_copie = cartes_br.copy()
     
+    print("DÉPART")
+    print("copie :", cartes_br_copie)
+    print("og: ",cartes_br)
+
+    tab_enleve = []
+    for i in range(len(cart)):
+        if cart[i] == 99:
+            print("i: ", i)
+            print("cart[i]: ", cart[i])
+            print("cartes_br[i]: ", cartes_br[i])
+            cartes_br_copie.remove(cartes_br[i])
+            tab_enleve.append(i)
+
+    print("tab_enleve: ", tab_enleve)
+
+    print("MILLIEU, AVANT BRASSER")
+    print("copie :", cartes_br_copie)
+    print("og: ",cartes_br)
+
     # Brasse les cartes
-    brasser(cartes_br)
+    brasser(cartes_br_copie)
+     
+    for i in tab_enleve:
+        cartes_br_copie.insert(i, cartes_br[i])
 
+    print("MILLIEU, APRÈS BRASSER")
+    print("copie :", cartes_br_copie)
+    print("og: ",cartes_br)
     
+    cartes_br = cartes_br_copie
+    
+    print("FIN")
+    print("copie :", cartes_br_copie)
+    print("og: ",cartes_br)
+    
+    #print(cartes_br)
+    #print(cartes_br_copie)
     
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
@@ -372,16 +416,19 @@ def trouver_indice(tab, a_trouver):
 def en_ordre(tab):
     ligne_elem_croissant = tab.copy()
     
-    elem_precedant = 0
-    index = 0
-    for elem in tab:
-        if elem == elem_precedant + 4:
-            ligne_elem_croissant.insert(index-1, 1)
-            ligne_elem_croissant.insert(index, 1)
-            
-        index += 1
-        elem_precedant = elem
-    print(ligne_elem_croissant)
+    elem_precedant = ligne_elem_croissant[0]
+    index = 1
+    if ligne_elem_croissant[0] // 4 == 1:
+        ligne_elem_croissant.insert(index-1, 99)
+        print("2")
+        for elem in ligne_elem_croissant[1:]:
+            if elem == elem_precedant + 4:
+                print("99")
+                ligne_elem_croissant.insert(index, 99)
+            else:
+                break     
+            index += 1
+            elem_precedant = elem
     return ligne_elem_croissant
 
 # Test unitaires ------------------------------------------------------
