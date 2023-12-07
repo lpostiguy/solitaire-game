@@ -53,7 +53,7 @@ def init():
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 noms_cartes_br.append(noms_cartes[k])
     # Met à jour le contenu de la page HTML
-    mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br)
+    mise_a_jour_affichage(cartes_br, noms_cartes_br)
 
 
 # Procédure qui met à jour le contenu HTML de la page web.
@@ -61,39 +61,8 @@ def init():
 # brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
-def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
+def mise_a_jour_affichage(cartes_br, noms_cartes_br):
     # Tableau qui contiendra les cardes ordonnées
-
-    # *************************************************************************
-
-    cartes = []
-
-    # Tableau  ordonnée de toutes les cartes
-    for i in range(52):
-        cartes.append(i)
-
-    # Cartes brassées
-    cartes_br = brasser(cartes)
-
-    # Tableau contenant tous les noms des cartes, en ordres croissant et en
-    # couleur
-    noms_cartes = paquet_cartes()
-
-    # Paquet brassé avec le noms des cartes
-    noms_cartes_br = []
-    
-    # Boucle qui permet de trouver l'élément associé aux noms des cartes
-    # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
-    # 0 est retrouvé dans cartes_br, et son indice est retourné.
-    for i in cartes_br:
-        for k in range(len(noms_cartes)):
-            if k == i:
-                # index_carte = cartes_br.index(1)
-                index_carte = trouver_indice(cartes_br, 1)
-
-                # Crée un nouveau tableau mélangé, avec le nom des cartes
-                noms_cartes_br.append(noms_cartes[k])
-    # *************************************************************************
 
     # Création des éléments HTML. Ces lignes n'ont déjà plus les as
     # Moyen de faire ça plus efficacement?
@@ -188,7 +157,7 @@ def mise_a_jour_affichage(cartes_br, noms_cartes, noms_cartes_br):
             + ", noms_cartes, noms_cartes_br, cartes_br)",
         )
         # cas.innerHTML = """<td id=case"""+ str(99)+ """><img src="cards/"""+i + """.svg"></td>"""
-    print("*********", cartes_br)
+    print("**INIT*******", cartes_br)
 
 
 def mise_a_jour_affichage_test(cartes_br, noms_cartes, noms_cartes_br):
@@ -291,7 +260,7 @@ def mise_a_jour_affichage_test(cartes_br, noms_cartes, noms_cartes_br):
         # print(i[1])
         endroit = document.querySelector("#case" + str(i[1]))
         endroit.setAttribute("style", "background-color: red")
-
+        #print(i)
         tab = i
         cas.setAttribute(
             "onclick",
@@ -314,23 +283,10 @@ def mise_a_jour_affichage_test(cartes_br, noms_cartes, noms_cartes_br):
 
 # TODO : Réactualiser le tableau après avoir bougé une carte
 def bouger(origine, destination, noms_cartes, noms_cartes_br, cartes_br):
-    # Les noms_cartes_br et cartes_br globaux sont différents de l'affichage...
-    # print(noms_cartes_br). Les cartes ne devrait peut-être pas re-brassées
-    # dans mise_a_jour?
-    # print(cartes_br, '\n')
+    temp = cartes_br[origine]
+    cartes_br[origine] = cartes_br[destination]
+    cartes_br[destination] = temp
 
-    # print(origine, destination)
-
-    # Échanger les 2 cartes
-    m = trouver_indice(cartes_br, origine)
-    p = trouver_indice(cartes_br, destination)
-
-    temp = cartes_br[m]
-    cartes_br[m] = cartes_br[p]
-    cartes_br[p] = temp
-
-    # print(cartes_br)
-    # print('\n')
     mise_a_jour_affichage_test(cartes_br, noms_cartes, noms_cartes_br)
 
 
@@ -430,17 +386,17 @@ def lignes(tab, case):
 # brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
-def brasser_cartes(cartes_bra, noms_cartes, noms_cartes_br):
+def brasser_cartes(cartes_br, noms_cartes, noms_cartes_br):
     global brasse_restant
 
     # Décrémente le nombre de brassé restant au joueur
     brasse_restant -= 1
 
     # Brasse les cartes
-    cartes_brasse = brasser(cartes_bra)
+    cartes_brasse = brasser(cartes_br)
 
     # Met à jour le contenu de la page HTML
-    mise_a_jour_affichage(cartes_brasse, noms_cartes, noms_cartes_br)
+    mise_a_jour_affichage(cartes_brasse, noms_cartes_br)
 
 
 # Retourne un tableau contenant en indice 0 la carte qui peut être déplacée
