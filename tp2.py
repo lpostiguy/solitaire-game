@@ -62,6 +62,23 @@ def init():
 # numéro et l'enseigne des cartes, en ordre, et un tableau contenant
 # le noms_des cartes brassées.
 def mise_a_jour_affichage(cartes_br, noms_cartes_br):
+
+    # Paquet brassé avec le noms des cartes
+    noms_cartes_br = []
+
+    # Boucle qui permet de trouver l'élément associé aux noms des cartes
+    # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
+    # 0 est retrouvé dans cartes_br, et son indice est retourné.
+    for i in cartes_br:
+        for k in range(len(noms_cartes)):
+            if k == i:
+                # index_carte = cartes_br.index(1)
+                index_carte = trouver_indice(cartes_br, 1)
+
+                # Crée un nouveau tableau mélangé, avec le nom des cartes
+                noms_cartes_br.append(noms_cartes[k])
+    
+    
     # Tableau qui contiendra les cardes ordonnées
 
     # Création des éléments HTML. Ces lignes n'ont déjà plus les as
@@ -157,10 +174,12 @@ def mise_a_jour_affichage(cartes_br, noms_cartes_br):
             + ", noms_cartes, noms_cartes_br, cartes_br)",
         )
         # cas.innerHTML = """<td id=case"""+ str(99)+ """><img src="cards/"""+i + """.svg"></td>"""
-    print("**INIT*******", cartes_br)
+    print("**MISEÀJOUR*******", cartes_br)
 
 
 def mise_a_jour_affichage_test(cartes_br, noms_cartes, noms_cartes_br):
+    
+    print('misejourtest')
     
     # Boucle qui permet de trouver l'élément associé aux noms des cartes
     # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
