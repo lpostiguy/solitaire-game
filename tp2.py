@@ -249,8 +249,6 @@ def brasser(tableau):
 # présent dans le tableau (tab). De plus, elle retire les as, les transformant
 # en cases vides.
 def lignes(tab, case):
-    # print(tab)
-    # print(case)
     ligne = ""
 
     for i in tab:
@@ -268,7 +266,6 @@ def lignes(tab, case):
                 + """.svg"></td>"""
             )
         case += 1  # Ajustement de la case, pour la prochaine
-    # print(ligne)
     return ligne
 
 
@@ -284,7 +281,6 @@ def brasser_cartes():
 
     # Décrémente le nombre de brassé restant au joueur
     brasse_restant -= 1
-    # print(cartes_br)
 
     cart = en_ordre(cartes_br[:13])
     ligne2 = en_ordre(cartes_br[13:26])
@@ -300,46 +296,48 @@ def brasser_cartes():
 
     cartes_br_copie = cartes_br.copy()
     
-    print("DÉPART")
-    print("copie :", cartes_br_copie)
-    print("og: ",cartes_br)
-
     tab_enleve = []
+    i = 0
     for i in range(len(cart)):
         if cart[i] == 99:
-            print("i: ", i)
-            print("cart[i]: ", cart[i])
-            print("cartes_br[i]: ", cartes_br[i])
             cartes_br_copie.remove(cartes_br[i])
             tab_enleve.append(i)
 
-    print("tab_enleve: ", tab_enleve)
-
-    print("MILLIEU, AVANT BRASSER")
-    print("copie :", cartes_br_copie)
-    print("og: ",cartes_br)
-
     # Brasse les cartes
     brasser(cartes_br_copie)
-     
+
     for i in tab_enleve:
         cartes_br_copie.insert(i, cartes_br[i])
 
-    print("MILLIEU, APRÈS BRASSER")
-    print("copie :", cartes_br_copie)
-    print("og: ",cartes_br)
-    
     cartes_br = cartes_br_copie
-    
-    print("FIN")
-    print("copie :", cartes_br_copie)
-    print("og: ",cartes_br)
-    
-    #print(cartes_br)
-    #print(cartes_br_copie)
     
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
+    
+    
+# La fonction en_ordre sert à détecter les eléments (nombre entiers)
+# qui sont croissants et ayant une incrémentation de +1 entre
+# élément du tableau. Les éléments qui sont en ordre sont remplacé par le
+# boléen 'True'.
+# La fonction prend en paramètre un tableau (tab).
+def en_ordre(tab):
+    ligne_elem_croissant = tab.copy()
+    
+    elem_precedant = ligne_elem_croissant[0]
+    index = 1
+    if ligne_elem_croissant[0] // 4 == 1 or ligne_elem_croissant[0] == 8:
+        ligne_elem_croissant.insert(index - 1, 99)
+        ligne_elem_croissant.remove(ligne_elem_croissant[index])
+
+        for elem in ligne_elem_croissant[1:]:
+            if elem == elem_precedant + 4:
+                ligne_elem_croissant.insert(index, 99)
+                ligne_elem_croissant.remove(ligne_elem_croissant[index + 1])
+            else:
+                break     
+            index += 1
+            elem_precedant = elem
+    return ligne_elem_croissant
 
 
 # Retourne un tableau contenant en indice 0 la carte qui peut être déplacée
@@ -357,13 +355,6 @@ def voisins_as(noms_cartes_brasse):
             valeur_carte = noms_cartes_brasse[indexe]
             indexe_noms_cartes = noms_cartes.index(valeur_carte)
 
-            # Si la carte est un roi, continue car rien ne peut suivre cette carte
-            if cartes_br[indexe - 1] + 4 > 51:
-                continue
-
-            # Si il y a plusieurs AS à la suite de l'autre
-            if cartes_br[indexe - 1] // 4 == 0:
-                continue
 
             # Pour que la première case donne la posibilité de mettre toute
             # les cartes ayant la valeur 2
@@ -371,7 +362,14 @@ def voisins_as(noms_cartes_brasse):
                 for deux in range(4, 8):
                     indexes_carte_suivante.append(
                         [trouver_indice(cartes_br, deux), indexe]
-                    )
+                    )      
+            # Si il y a plusieurs AS à la suite de l'autre
+            if cartes_br[indexe - 1] // 4 == 0:
+                continue
+            
+            # Si la carte est un roi, continue car rien ne peut suivre cette carte
+            if cartes_br[indexe - 1] + 4 > 51:
+                continue
 
             else:
                 # Valeur de la carte précédant la case vide (AS)
@@ -406,30 +404,6 @@ def trouver_indice(tab, a_trouver):
                 return i
         return False
 
-
-# La fonction en_ordre sert à détecter les eléments (nombre entiers)
-# qui sont croissants et ayant une incrémentation de +1 entre
-# élément du tableau. Les éléments qui sont en ordre sont remplacé par le
-# boléen 'True'.
-# La fonction prend en paramètre un tableau (tab).
-
-def en_ordre(tab):
-    ligne_elem_croissant = tab.copy()
-    
-    elem_precedant = ligne_elem_croissant[0]
-    index = 1
-    if ligne_elem_croissant[0] // 4 == 1:
-        ligne_elem_croissant.insert(index-1, 99)
-        print("2")
-        for elem in ligne_elem_croissant[1:]:
-            if elem == elem_precedant + 4:
-                print("99")
-                ligne_elem_croissant.insert(index, 99)
-            else:
-                break     
-            index += 1
-            elem_precedant = elem
-    return ligne_elem_croissant
 
 # Test unitaires ------------------------------------------------------
 
