@@ -270,11 +270,9 @@ def lignes(tab, case):
 
 
 # Procédure qui brasse les cartes en tenant compte du nombre de
-# brassé restant au joueur.
-# La procédure prend en paramètres 3 tableau, un tableau de cartes
-# brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
-# numéro et l'enseigne des cartes, en ordre, et un tableau contenant
-# le noms_des cartes brassées.
+# brassé restant au joueur et des cartes qui sont déja placé en ordre.
+# La procédure modifie globalement 2 variable, les brassés restant du joueur
+# (brasse_restant) et les cartes brassées (carte_br)
 def brasser_cartes():
     global brasse_restant
     global cartes_br
@@ -282,11 +280,13 @@ def brasser_cartes():
     # Décrémente le nombre de brassé restant au joueur
     brasse_restant -= 1
 
+    # Création de ligne du jeu, avec carte en ordre retiré des tableaux
     cart = en_ordre(cartes_br[:13])
     ligne2 = en_ordre(cartes_br[13:26])
     ligne3 = en_ordre(cartes_br[26:39])
     ligne4 = en_ordre(cartes_br[39:])
 
+    # Combiner les 4 lignes dans un tableau
     for i in ligne2:
         cart.append(i)
     for i in ligne3:
@@ -294,21 +294,33 @@ def brasser_cartes():
     for i in ligne4:
         cart.append(i)
 
+    # Copie du tableau cartes_br
     cartes_br_copie = cartes_br.copy()
     
+    # Tableau de cartes enlevées 
     tab_enleve = []
-    i = 0
+    
+    # Enlever les cartes qui en ordre croissantes
     for i in range(len(cart)):
+        # Les cartes qui on une valeurs de 99, sont en ordre
         if cart[i] == 99:
+            # Enlever les cartes qui sont en ordre du tableau qui
+            # sera ensuite brassé
             cartes_br_copie.remove(cartes_br[i])
+            # Ajouter la carte enlevé dans le tableau de carte enlevées
             tab_enleve.append(i)
 
     # Brasse les cartes
     brasser(cartes_br_copie)
 
+    # Réinsérer les cartes qui sont en ordre dans le paquet
+    # de carte brassé
     for i in tab_enleve:
         cartes_br_copie.insert(i, cartes_br[i])
 
+    # Actualiser le paquet de carte brassé par le nouveau
+    # paquet de carte qui conserve la place des cartes qui
+    # était en ordre
     cartes_br = cartes_br_copie
     
     # Met à jour le contenu de la page HTML
@@ -317,25 +329,35 @@ def brasser_cartes():
     
 # La fonction en_ordre sert à détecter les eléments (nombre entiers)
 # qui sont croissants et ayant une incrémentation de +1 entre
-# élément du tableau. Les éléments qui sont en ordre sont remplacé par le
+# élément du tableau et partant de la carte ayant la valeur 2. 
+# Les éléments qui sont en ordre sont remplacé par le
 # boléen 'True'.
 # La fonction prend en paramètre un tableau (tab).
 def en_ordre(tab):
+    # Copie du tableau en paramètre 
     ligne_elem_croissant = tab.copy()
-    
     elem_precedant = ligne_elem_croissant[0]
+    
+    # Index des cartes du tableau
     index = 1
+    # Détecte si la première carte du tableau est de valeur 2
     if ligne_elem_croissant[0] // 4 == 1 or ligne_elem_croissant[0] == 8:
+        # Remplace le 2 par 99 (chiffre pour représenté que la carte est en ordre)
         ligne_elem_croissant.insert(index - 1, 99)
         ligne_elem_croissant.remove(ligne_elem_croissant[index])
 
+        # Détecte si les cartes sont en ordres croissant, +1 entre chaque carte
         for elem in ligne_elem_croissant[1:]:
             if elem == elem_precedant + 4:
                 ligne_elem_croissant.insert(index, 99)
                 ligne_elem_croissant.remove(ligne_elem_croissant[index + 1])
+                
+            # Si la carte suivant la carte de valeur 2 n'est pas en ordre, alors
+            # ça ne sert à rien de vérifier les autres cartes de la ligne.
             else:
                 break     
             index += 1
+            # Garder en mémoire l'élément précédant
             elem_precedant = elem
     return ligne_elem_croissant
 
