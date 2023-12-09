@@ -27,8 +27,8 @@ import math
 
 
 # La procédure 'nouvelle_partie' ne prend pas de paramètre. Lorsque le bouton
-# HTML 'nouvelle partie' est cliqué, cette fonction est appelée afin de créer
-# une nouvelle partie. Bien que cette fonction ne fait qu'appeler init(), elle
+# HTML 'nouvelle partie' est cliqué, cette procédure est appelée afin de créer
+# une nouvelle partie. Bien que cette procédure ne fait qu'appeler init(), elle
 # permet de mieux expliciter ce qui se passe à l'appuie du bouton.
 
 def nouvelle_partie():
@@ -58,9 +58,10 @@ def init():
     # Tableau  ordonnée de toutes les cartes
     for i in range(52):
         cartes.append(i)
-
+    
     # Cartes brassées
     cartes_br = brasser(cartes)
+    
 
     # Tableau contenant tous les noms des cartes, en ordres croissant et en
     # couleur
@@ -71,6 +72,7 @@ def init():
     
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
+    
 
 
 # La procédure 'mise_a_jour_affichage' ne prend pas de paramètre. Cette procédure
@@ -130,197 +132,6 @@ def mise_a_jour_affichage():
     # Modification du code HTML pour mettre les cartes en verts et les rendre
     # cliquables
     cartes_vertes(matrice_déplacements)
-
-
-# La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
-# paramètre global brasse_restant, qui contient le nombre de brassage restant
-# au joueur. Cette procédure modifie le code HTML de la page web pour changer
-# l'affichage du bouton brasser; s'il ne reste plus de brassage disponible,
-# le bouton disparait. Sinon, on affiche le bouton avec le compteur.
-
-def bouton_brasser():
-    brasseur = document.querySelector("#brasser")
-    
-    # Si le joueur à gagné la partie
-    if partie_gagne():
-        brasseur.innerHTML = "Vous avez réussi! Bravo!"
-    
-    # Si le joueur n'à plus de brassage de cartes restant
-    elif brasse_restant == 0:
-        brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
-
-    # Si le joueur à encore des brassages de cartes restant
-    else:
-        brasseur.innerHTML = (
-            """Vous pouvez encore <button id="brasser_cartes" 
-            onclick="brasser_cartes()"> brasser les cartes</button> """ 
-            + str(brasse_restant) + " fois")
-
-
-# La procédure 'cartes_vertes' prend en paramètre une matrice. L'élément à 
-# l'indice 0 de chaque ligne de la matrice corresopnd à l'indice d'une carte
-# qui doit être mise en vert. L'indice 1 de chaque ligne correspond à l'indice
-# de la position où cette carte peut être déplacée, si elle est cliquée. Cette
-# procédure modifie le code HTML afin de mettre en vert les cartes qui le 
-# doivent, et leur ajoute la possibilité d'être déplacées.
-
-def cartes_vertes (matrice):
-    for i in matrice:
-        
-        # L'indice 0 des sous-tableau de tab contient la carte qui peut
-        # être déplacée, qu'il faut mettre en vert
-        cas = document.querySelector("#case" + str(i[0]))
-        cas.setAttribute("style", "background-color: lime")
-
-        # Ligne de la matrice contenant l'indice de la case qui peut être 
-        # bougée et l'indice de l'endroit où elle peut être déplacée
-        cases = i 
-        
-        cas.setAttribute(
-            "onclick",
-            "bouger("
-            + str(cases[0])
-            + ","
-            + str(cases[1])
-            + ")",
-        )
-    
-
-# La procédure 'nombres_a_noms' ne prend pas de paramètre. Elle utilise les 
-# variables globales cartes_br et noms_cartes afin d'associer les chiffres du
-# tableau cartes_br aux indices du tableau noms_cartes afin de mélanger 
-# noms_cartes de la même manière que cartes_br. Elle retourne alors un nouveau
-# tableau, un doublon de carte_br, mais avec le nom des cartes.
-
-def nombres_a_noms ():
-    tab_noms = []
-    for i in cartes_br:
-        for k in range(len(noms_cartes)):
-            if k == i:
-
-                # Crée un nouveau tableau mélangé, avec le nom des cartes
-                tab_noms.append(noms_cartes[k])
-    return tab_noms
-
-
-# La procédure 'bouger' prend en paramètre un indice d'origine et un indice de
-# destination. Elle utilise le tableau global cartes_br et échange l'élément
-# à l'indice d'origne avec l'élément à l'indice de destination. Ensuite,
-# elle met à jour l'affichage du jeu pour prendre en compte cette 
-# modification, en appelant mise_a_jour_affichage..
-
-def bouger(origine, destination):
-    temp = cartes_br[origine]
-    cartes_br[origine] = cartes_br[destination]
-    cartes_br[destination] = temp
-
-    mise_a_jour_affichage()
-
-
-# La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
-# liste contenant toutes les cartes d'un jeu de cartes classique en ordre
-# croissant en couleur, commençant par le trèfle (C), le carreaux (D), le coeur
-# (H), puis le pique (S). Ce paquet ne contient pas de Jokers. Pour ce faire,
-# la fonction cycle au travers des quatres couleurs, et leur ajoute les
-# valeurs. De plus, cette fonction ajoute les figures et les as. Le paquet
-# complet est retourné.
-
-def paquet_cartes():
-    
-    # Tableau qui contiendra toutes les cartes
-    noms_cartes = []
-    
-    # Tableau contenant toutes les couleurs, en anglais
-    noms_couleurs = ["C", "D", "H", "S"]
-
-    # Création de la liste de toutes les valeurs de cartes, dans toutes les
-    # couleurs. Commencer par cycler au travers de toutes les valeurs.
-    for i in range(1, 14):
-        
-        # Cycler au travers des 4 couleurs
-        for couleur in noms_couleurs:
-            
-            # Si c'est un as, ajouter A
-            if i == 1:
-                noms_cartes.append("A" + couleur)
-
-            # Si c'est un valet, ajouter J
-            elif i == 11:
-                noms_cartes.append("J" + couleur)
-
-            # Si c'est une dame, ajouter Q
-            elif i == 12:
-                noms_cartes.append("Q" + couleur)
-
-            # Si c'est un roi, ajouter K
-            elif i == 13:
-                noms_cartes.append("K" + couleur)
-
-            # Si c'est une chiffre normal
-            else:
-                noms_cartes.append(str(i) + couleur)
-    return noms_cartes
-
-
-# La fonction 'brasser' prend en paramètre un tableau (tab) ne contenant que
-# des éléments allant de 0 à 51 en ordre croissant. Ce tableau sera
-# mélangé selon le principe suivant : échangeons le dernier élément n du
-# tableau et échangeons le avec un élément aléatoire le précédant. Puis,
-# même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
-# La fonction retourne ce tableau mélangé.
-
-def brasser(tableau):
-
-    for i in range(len(tableau)):
-        # Variable permettant de cycler au travers des éléments du tableau, en
-        # partant par la fin.
-        indice_dernier_element = len(tableau) - 1 - i
-
-        # Choix aléatoire précédant le dernier élément
-        aleatoire = math.floor(random.random() * len(tableau) - 1 - i)
-
-        # Échanger les éléments
-        temp = tableau[indice_dernier_element]
-        tableau[indice_dernier_element] = tableau[aleatoire]
-        tableau[aleatoire] = temp
-        
-    return tableau
-
-
-# La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères
-# non vide représentant le nom des cartes (tab_valeurs), un entier 
-# correspondand à l'indice du premier élément de la ligne active (case). Elle 
-# retourne le code HTML permettant d'afficher une ligne d'un tableau HTML avec
-# chaque carte. Elle assigne une image à chaque nom présent dans le tableau 
-# tab_valeur. De plus, elle retire les as, les transformant en cases vides. 
-# Elle retourne la chaîne de caractères correspondant à une ligne du jeu en 
-# HTML, soit un tableau d'images.
-
-def lignes(tab_valeurs, case):
-    
-    ligne = ""
-
-    for i in tab_valeurs:
-
-        # Cas où la carte est un as. Mettre 'absent' dans le code de l'image
-        if "A" in i:
-            ligne += (
-                """<td id=case""" + str(case) 
-                + """><img src="cards/absent.svg"></td>"""
-            )
-            
-        # Cas pour toutes les autres cartes
-        else:
-            ligne += (
-                """<td id=case"""
-                + str(case)
-                + """><img src="cards/"""
-                + i
-                + """.svg"></td>"""
-            )
-        case += 1  # Ajustement de la case, pour la prochaine carte
-        
-    return ligne
 
 
 # La procédure 'brasser_cartes' ne prend pas de paramètres. Elle brasse les
@@ -384,10 +195,10 @@ def brasser_cartes():
     
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
-    
 
-# La fonction 'en_ordre' prend en paramètre un tableau (tab). Elle détecte
-# les éléments (nombres entiers) qui sont en ordre croissant et qui ont
+
+# La fonction 'en_ordre' prend en paramètre un tableau non vide (tab). Elle 
+# détecte les éléments (nombres entiers) qui sont en ordre croissant et qui ont
 # une incrémentation de +1 entre eux, partant à la valeur 2, et à partir du 
 # début du tableau. Les éléments en ordre sont remplacés par 99, un nombre 
 # arbitraire non ambigüe avec les valeurs du paquet de cartes. La fonction 
@@ -430,16 +241,262 @@ def en_ordre(tab):
         
     return ligne_elem_croissant
 
+# Tests unitaires de la fonction 'en_ordre()'
 
-# Retourne un tableau contenant en indice 0 la carte qui peut être déplacée
-# et à l'indice 1 la position où elle peut être déplacée.
+def test_en_ordre():
+    assert en_ordre([1,2,3,4,5]) == [1,2,3,4,5]
+    assert en_ordre([5,9,10,14]) == [99,99,10,14]
+    assert en_ordre([5,7,11,15]) == [99,7,11,15]
+    assert en_ordre([12,16,20,24]) == [12,16,20,24]
+
+# La fonction 'brasser' prend en paramètre un tableau (tab) ne contenant que
+# des éléments allant de 0 à 51 en ordre croissant. Ce tableau sera
+# mélangé selon le principe suivant : échangeons le dernier élément n du
+# tableau et échangeons le avec un élément aléatoire le précédant. Puis,
+# même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
+# La fonction retourne ce tableau mélangé.
+
+def brasser(tableau):
+
+    for i in range(len(tableau)):
+        # Variable permettant de cycler au travers des éléments du tableau, en
+        # partant par la fin.
+        indice_dernier_element = len(tableau) - 1 - i
+
+        # Choix aléatoire précédant le dernier élément
+        aleatoire = math.floor(random.random() * len(tableau) - 1 - i)
+
+        # Échanger les éléments
+        temp = tableau[indice_dernier_element]
+        tableau[indice_dernier_element] = tableau[aleatoire]
+        tableau[aleatoire] = temp
+        
+    return tableau
+    
+
+# Test unitaire de la fonction 'brasser()'
+
+def test_brasser():
+    tab = []
+    for i in range(52):
+        tab.append(i)
+
+    tab_brasse = tab.copy()
+    assert brasser(tab_brasse) != tab
+    assert brasser([0]) == [0]
+    assert brasser([]) == []
+
+
+# La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères
+# non vide représentant le nom des cartes (tab_valeurs), un entier 
+# correspondand à l'indice du premier élément de la ligne active (case). Elle 
+# retourne le code HTML permettant d'afficher une ligne d'un tableau HTML avec
+# chaque carte. Elle assigne une image à chaque nom présent dans le tableau 
+# tab_valeur. De plus, elle retire les as, les transformant en cases vides. 
+# Elle retourne la chaîne de caractères correspondant à une ligne du jeu en 
+# HTML, soit un tableau d'images.
+
+def lignes(tab_valeurs, case):
+    
+    ligne = ""
+
+    for i in tab_valeurs:
+
+        # Cas où la carte est un as. Mettre 'absent' dans le code de l'image
+        if "A" in i:
+            ligne += (
+                """<td id=case""" + str(case) 
+                + """><img src="cards/absent.svg"></td>"""
+            )
+            
+        # Cas pour toutes les autres cartes
+        else:
+            ligne += (
+                """<td id=case"""
+                + str(case)
+                + """><img src="cards/"""
+                + i
+                + """.svg"></td>"""
+            )
+        case += 1  # Ajustement de la case, pour la prochaine carte
+        
+    return ligne
+
+
+# Test unitaire de la fonction 'lignes()'
+
+def test_lignes():
+    # Cas de base
+    assert lignes(
+        ["JS", "7S", "6S", "QS", "4C", "8D", "5C", "9S", "2H", "AC", "8H",\
+         "5D", "10C"],
+        0,) == (
+        """<td id=case0><img src="cards/JS.svg"></td>"""
+        +"""<td id=case1><img src="cards/7S.svg"></td>"""
+        +"""<td id=case2><img src="cards/6S.svg"></td>"""
+        +"""<td id=case3><img src="cards/QS.svg"></td>"""
+        +"""<td id=case4><img src="cards/4C.svg"></td>"""
+        +"""<td id=case5><img src="cards/8D.svg"></td>"""
+        +"""<td id=case6><img src="cards/5C.svg"></td>"""
+        +"""<td id=case7><img src="cards/9S.svg"></td>"""
+        +"""<td id=case8><img src="cards/2H.svg"></td>"""
+        +"""<td id=case9><img src="cards/absent.svg"></td>"""
+        +"""<td id=case10><img src="cards/8H.svg"></td>"""
+        +"""<td id=case11><img src="cards/5D.svg"></td>"""
+        +"""<td id=case12><img src="cards/10C.svg"></td>"""
+    )
+
+# La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
+# liste contenant toutes les cartes d'un jeu de cartes classique en ordre
+# croissant en couleur, commençant par le trèfle (C), le carreaux (D), le coeur
+# (H), puis le pique (S). Ce paquet ne contient pas de Jokers. Pour ce faire,
+# la fonction cycle au travers des quatres couleurs, et leur ajoute les
+# valeurs. De plus, cette fonction ajoute les figures et les as. Le paquet
+# complet est retourné.
+
+def paquet_cartes():
+    
+    # Tableau qui contiendra toutes les cartes
+    noms_cartes = []
+    
+    # Tableau contenant toutes les couleurs, en anglais
+    noms_couleurs = ["C", "D", "H", "S"]
+
+    # Création de la liste de toutes les valeurs de cartes, dans toutes les
+    # couleurs. Commencer par cycler au travers de toutes les valeurs.
+    for i in range(1, 14):
+        
+        # Cycler au travers des 4 couleurs
+        for couleur in noms_couleurs:
+            
+            # Si c'est un as, ajouter A
+            if i == 1:
+                noms_cartes.append("A" + couleur)
+
+            # Si c'est un valet, ajouter J
+            elif i == 11:
+                noms_cartes.append("J" + couleur)
+
+            # Si c'est une dame, ajouter Q
+            elif i == 12:
+                noms_cartes.append("Q" + couleur)
+
+            # Si c'est un roi, ajouter K
+            elif i == 13:
+                noms_cartes.append("K" + couleur)
+
+            # Si c'est une chiffre normal
+            else:
+                noms_cartes.append(str(i) + couleur)
+    return noms_cartes
+
+
+# Test unitaire de la fonction 'paquet_cartes()'
+
+def test_paquet_cartes():
+    # Cas de base
+    assert paquet_cartes() == [
+        'AC', 'AD', 'AH', 'AS', '2C', '2D', '2H', '2S', 
+        '3C', '3D', '3H', '3S', '4C', '4D', '4H', '4S',
+        '5C', '5D', '5H', '5S', '6C', '6D', '6H', '6S',
+        '7C', '7D', '7H', '7S', '8C', '8D', '8H', '8S',
+        '9C', '9D', '9H', '9S', '10C', '10D', '10H',
+        '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
+        'QS', 'KC', 'KD', 'KH', 'KS']
+
+
+# La procédure 'nombres_a_noms' ne prend pas de paramètre. Elle utilise les 
+# variables globales cartes_br et noms_cartes afin d'associer les chiffres du
+# tableau cartes_br aux indices du tableau noms_cartes afin de mélanger 
+# noms_cartes de la même manière que cartes_br. Elle retourne alors un nouveau
+# tableau, un doublon de carte_br, mais avec le nom des cartes.
+
+def nombres_a_noms ():
+    tab_noms = []
+    for i in cartes_br:
+        for k in range(len(noms_cartes)):
+            if k == i:
+
+                # Crée un nouveau tableau mélangé, avec le nom des cartes
+                tab_noms.append(noms_cartes[k])
+    return tab_noms
+
+
+# La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
+# paramètre global brasse_restant, qui contient le nombre de brassage restant
+# au joueur. Cette procédure modifie le code HTML de la page web pour changer
+# l'affichage du bouton brasser; s'il ne reste plus de brassage disponible,
+# le bouton disparait. Sinon, on affiche le bouton avec le compteur.
+
+def bouton_brasser():
+    brasseur = document.querySelector("#brasser")
+    
+    # Si le joueur à gagné la partie
+    if partie_gagne():
+        brasseur.innerHTML = "Vous avez réussi! Bravo!"
+    
+    # Si le joueur n'à plus de brassage de cartes restant
+    elif brasse_restant == 0:
+        brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
+
+    # Si le joueur à encore des brassages de cartes restant
+    else:
+        brasseur.innerHTML = (
+            """Vous pouvez encore <button id="brasser_cartes" 
+            onclick="brasser_cartes()"> brasser les cartes</button> """ 
+            + str(brasse_restant) + " fois")
+
+
+# La procédure 'cartes_vertes' prend en paramètre une matrice. L'élément à 
+# l'indice 0 de chaque ligne de la matrice corresopnd à l'indice d'une carte
+# qui doit être mise en vert. L'indice 1 de chaque ligne correspond à l'indice
+# de la position où cette carte peut être déplacée, si elle est cliquée. Cette
+# procédure modifie le code HTML afin de mettre en vert les cartes qui le 
+# doivent, et leur ajoute la possibilité d'être déplacées.
+
+def cartes_vertes (matrice):
+    for i in matrice:
+        
+        # L'indice 0 des sous-tableau de tab contient la carte qui peut
+        # être déplacée, qu'il faut mettre en vert
+        cas = document.querySelector("#case" + str(i[0]))
+        cas.setAttribute("style", "background-color: lime")
+
+        # Ligne de la matrice contenant l'indice de la case qui peut être 
+        # bougée et l'indice de l'endroit où elle peut être déplacée
+        cases = i 
+        
+        cas.setAttribute(
+            "onclick",
+            "bouger("
+            + str(cases[0])
+            + ","
+            + str(cases[1])
+            + ")",
+        )
+
+
+# La procédure 'bouger' prend en paramètre un indice d'origine et un indice de
+# destination. Elle utilise le tableau global cartes_br et échange l'élément
+# à l'indice d'origne avec l'élément à l'indice de destination. Ensuite,
+# elle met à jour l'affichage du jeu pour prendre en compte cette 
+# modification, en appelant mise_a_jour_affichage..
+
+def bouger(origine, destination):
+    temp = cartes_br[origine]
+    cartes_br[origine] = cartes_br[destination]
+    cartes_br[destination] = temp
+
+    mise_a_jour_affichage()
+
 
 # La fonction voisins_as prend en paramètre un tableau brassé ayant le noms des
 # cartes (noms_cartes_brasse). Cette fonction trouve les as dans le paquet,
 # trouve la valeur de la carte la précédant, et la carte qui devrait aller à la
 # place de l'as. Elle retourne donc un tableau dont le premier élément est
 # l'indice de la carte pouvant être déplacée, et dont le deuxième élément est
-# l'indice de la position où elle peut être déplacée.
+# l'indice de la position où elle peut être déplacée. Étant donnée le caractère
+# aléatoire de cartes_br, cette fonction ne possède pas de tests unitaires.
 
 def voisins_as(noms_cartes_brasse):
     
@@ -497,7 +554,7 @@ def voisins_as(noms_cartes_brasse):
                 # Ajouter la carte suivante au tableau qui contient la
                 # liste de carte à afficher en vert
                 index_carte_suivante.append([index_suivant, index])
-
+    
     return index_carte_suivante
 
 
@@ -505,6 +562,7 @@ def voisins_as(noms_cartes_brasse):
 # élément à chercher dans ce tableau (a_trouver). Si l'élément n'est pas
 # présent dans le tableau, la fonction retourne False. Sinon, cette 
 # fonction retourne l'indice de l'élément à chercher.
+
 def trouver_indice(tab, a_trouver):
     
     # Cas si le tableau est vide
@@ -521,10 +579,28 @@ def trouver_indice(tab, a_trouver):
         return False
 
 
+# Test unitaire de la fonction 'trouver_indice()'
+
+def test_trouver_indice():
+    # Cas de base
+    assert trouver_indice([1, 3, 4, 6, 5], 4) == 2
+
+    # Cas quand le paramètre a_trouvé
+    # ne fait pas partie de la liste
+    assert trouver_indice([1, 2, 3, 4, 5], 8) == False
+
+    # Cas quand le tableau est vide
+    assert trouver_indice([0], 8) == False
+
+    # Cas quand le tableau ne contient pas d'éléments
+    assert trouver_indice([], 5) == False
+
+
 # La fonction 'partie_gagne' ne prend pas de paramètre. Cette fonction détecte
 # si une partie est gagnée, soit si toutes les cartes du jeu sont en ordres
 # croissant, en couleur. La fonction retourne un booléen; True pour une partie
-# gagnée et False pour une partie non gagnée.
+# gagnée et False pour une partie non gagnée. Étant donnée le caractère
+# aléatoire de cartes_br, cette fonction ne possède pas de tests unitaires.
 
 def partie_gagne():
     global cartes_br
@@ -562,61 +638,8 @@ def partie_gagne():
         return False # Cas de non victoire
 
 
-# Test unitaires ------------------------------------------------------
-
-
-# Test unitaire de la fonction 'trouver_indice()'
-def test_trouver_indice():
-    # Cas de base
-    assert trouver_indice([1, 3, 4, 6, 5], 4) == 2
-
-    # Cas quand le paramètre a_trouvé
-    # ne fait pas partie de la liste
-    assert trouver_indice([1, 2, 3, 4, 5], 8) == False
-
-    # Cas quand le tableau est vide
-    assert trouver_indice([0], 8) == False
-
-    # Cas quand le tableau ne contient pas d'éléments
-    assert trouver_indice([], 5) == False
-
-
-# Test unitaire de la fonction 'brasser()'
-def test_brasser():
-    tab = []
-    for i in range(52):
-        tab.append(i)
-
-    tab_brasse = tab.copy()
-    assert brasser(tab_brasse) != tab
-    assert brasser([0]) == [0]
-    assert brasser([]) == []
-
-
-# Test unitaire de la fonction 'paquet_cartes()'
-def test_paquet_cartes():
-    # Cas de base
-    assert paquet_cartes() == [
-        'AC', 'AD', 'AH', 'AS', '2C', '2D', '2H', '2S', 
-        '3C', '3D', '3H', '3S', '4C', '4D', '4H', '4S',
-        '5C', '5D', '5H', '5S', '6C', '6D', '6H', '6S',
-        '7C', '7D', '7H', '7S', '8C', '8D', '8H', '8S',
-        '9C', '9D', '9H', '9S', '10C', '10D', '10H',
-        '10S', 'JC', 'JD', 'JH', 'JS', 'QC', 'QD', 'QH',
-        'QS', 'KC', 'KD', 'KH', 'KS']
-
-# Test unitaire de la fonction 'lignes()'
-def test_lignes():
-    # Cas de base
-    assert lignes(
-        ["JS", "7S", "6S", "QS", "4C", "8D", "5C", "9S", "2H", "AC", "8H", "5D", "10C"],
-        0,
-    ) == (
-        """<td id=case0><img src="cards/JS.svg"></td><td id=case1><img src="cards/7S.svg"></td><td id=case2><img src="cards/6S.svg"></td><td id=case3><img src="cards/QS.svg"></td><td id=case4><img src="cards/4C.svg"></td><td id=case5><img src="cards/8D.svg"></td><td id=case6><img src="cards/5C.svg"></td><td id=case7><img src="cards/9S.svg"></td><td id=case8><img src="cards/2H.svg"></td><td id=case9><img src="cards/absent.svg"></td><td id=case10><img src="cards/8H.svg"></td><td id=case11><img src="cards/5D.svg"></td><td id=case12><img src="cards/10C.svg"></td>"""
-    )
-
-
 # Procédure qui effectue tous les test unitaires du programme.
+
 def test_unitaires():
     test_trouver_indice()
 
@@ -626,5 +649,6 @@ def test_unitaires():
 
     test_lignes()
 
+    test_en_ordre()
 
 test_unitaires()
