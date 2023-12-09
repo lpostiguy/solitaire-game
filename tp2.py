@@ -40,7 +40,7 @@ def init():
     global brasse_restant
 
     # Nombre de brassage de cartes restant
-    brasse_restant = 3
+    brasse_restant = 30
 
     # Tableau qui contiendra les numéros des cartes ordonnées
     cartes = []
@@ -817,8 +817,8 @@ def partie_gagne():
             # Ajouter la cartes en ordre dans le tableau
             tab_carte_en_ordre.append(i)
 
-    # Vérifie si les 52 cartes sont en ordre
-    if len(tab_carte_en_ordre) == 52:
+    # Vérifie si les 52 cartes - 4 as sont en ordre, soit 48 cartes
+    if len(tab_carte_en_ordre) == 48:
         return True  # Cas de victoire
     else:
         return False # Cas de non victoire
