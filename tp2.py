@@ -31,18 +31,19 @@ import math
 # une nouvelle partie. Bien que cette procédure ne fait qu'appeler init(), elle
 # permet de mieux expliciter ce qui se passe à l'appuie du bouton.
 
+
 def nouvelle_partie():
     init()
 
 
-# La procédure 'init' ne prend pas de paramètre. Elle permet de créer une 
-# nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure 
+# La procédure 'init' ne prend pas de paramètre. Elle permet de créer une
+# nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure
 # crée un paquet de carte, avec des nombres de 0 à 51, brasse ce paquet, et
 # associe ces numéros brassés aux noms des cartes correspondantes. Elle
 # appelle la procédure mise_a_jour_affichage, qui permet de lancer le jeu.
 
+
 def init():
-    
     # Initier les variables globales
     global cartes_br
     global noms_cartes
@@ -54,7 +55,7 @@ def init():
 
     # Tableau qui contiendra les numéros des cartes ordonnées
     cartes = []
-    
+
     # Tableau  ordonnée de toutes les cartes
     for i in range(52):
         cartes.append(i)
@@ -69,21 +70,21 @@ def init():
 
     # Paquet brassé avec le noms des cartes
     noms_cartes_br = nombres_a_noms()
-    
+
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
     
 
 
 # La procédure 'mise_a_jour_affichage' ne prend pas de paramètre. Cette procédure
-# modifie le code HTML de la page web, afin de mettre à jour le jeu au fur et 
+# modifie le code HTML de la page web, afin de mettre à jour le jeu au fur et
 # à mesure de l'avancement du joueur.
 
-def mise_a_jour_affichage():
 
+def mise_a_jour_affichage():
     # Paquet brassé avec le noms des cartes
     noms_cartes_br = nombres_a_noms()
-    
+
     # Création des éléments HTML.
     ligne1 = lignes(noms_cartes_br[:13], 0)
     ligne2 = lignes(noms_cartes_br[13:26], 13)
@@ -92,25 +93,56 @@ def mise_a_jour_affichage():
 
     # Changer le contenu HTML de l'élément ayant l'ID 'cb-body'
     racine = document.querySelector("#cb-body")
-    racine.innerHTML = """
-      <style>
-        #jeu table { float:none; }
-        #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
-        #jeu table td img { height:140px; }
-        #jeu {padding-left: 10px;}
-        #controles {padding-left: 10px;}
-        #controles {padding-top: 5px;}
-        #brasser {padding-top: 5px;}
-        #brasser {padding-bottom: 5px;}
-        #boutton {padding-top: 5px;}
-        
-      </style>
+    racine.innerHTML = (
+        """
+    <style>
+  #jeu table {
+    float: none;
+  }
+
+  #jeu table td {
+    border: 0;
+    padding: 1px 2px;
+    height: auto;
+    width: auto;
+  }
+
+  #jeu table td img {
+    height: 140px;
+  }
+
+  #jeu {
+    padding-left: 10px;
+  }
+
+  #controles {
+    padding-left: 10px;
+    padding-top: 5px;
+  }
+
+  #brasser {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  #boutton {
+    padding-top: 5px;
+  }
+</style>
       <div id="jeu">
         <table>
-          <tr>""" + ligne1 + """</tr>
-          <tr>""" + ligne2 + """</tr>
-          <tr>""" + ligne3 + """</tr>
-          <tr>""" + ligne4 + """</tr>
+          <tr>"""
+        + ligne1
+        + """</tr>
+          <tr>"""
+        + ligne2
+        + """</tr>
+          <tr>"""
+        + ligne3
+        + """</tr>
+          <tr>"""
+        + ligne4
+        + """</tr>
         </table>
       </div>
     <div id="controles">
@@ -120,18 +152,206 @@ def mise_a_jour_affichage():
         </button>
         </div>
     </div>"""
+    )
 
     # Affichage du bouton pour brasser les cartes
     bouton_brasser()
 
-    # Matrice où les lignes sont composés de l'élément 0 qui est l'indice de 
-    # la carte à mettre en vert, et l'élément 1 qui est l'indice où cette 
+    # Matrice où les lignes sont composés de l'élément 0 qui est l'indice de
+    # la carte à mettre en vert, et l'élément 1 qui est l'indice où cette
     # carte peut être déplacée.
     matrice_déplacements = voisins_as(noms_cartes_br)
-    
+
     # Modification du code HTML pour mettre les cartes en verts et les rendre
     # cliquables
     cartes_vertes(matrice_déplacements)
+
+
+# La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
+# paramètre global brasse_restant, qui contient le nombre de brassage restant
+# au joueur. Cette procédure modifie le code HTML de la page web pour changer
+# l'affichage du bouton brasser; s'il ne reste plus de brassage disponible,
+# le bouton disparait. Sinon, on affiche le bouton avec le compteur.
+
+
+def bouton_brasser():
+    brasseur = document.querySelector("#brasser")
+
+    # Si le joueur à gagné la partie
+    if partie_gagne():
+        brasseur.innerHTML = "Vous avez réussi! Bravo!"
+
+    # Si le joueur n'à plus de brassage de cartes restant
+    elif brasse_restant == 0:
+        brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
+
+    # Si le joueur à encore des brassages de cartes restant
+    else:
+        brasseur.innerHTML = (
+            """Vous pouvez encore <button id="brasser_cartes" 
+            onclick="brasser_cartes()"> brasser les cartes</button> """
+            + str(brasse_restant)
+            + " fois"
+        )
+
+
+# La procédure 'cartes_vertes' prend en paramètre une matrice. L'élément à
+# l'indice 0 de chaque ligne de la matrice corresopnd à l'indice d'une carte
+# qui doit être mise en vert. L'indice 1 de chaque ligne correspond à l'indice
+# de la position où cette carte peut être déplacée, si elle est cliquée. Cette
+# procédure modifie le code HTML afin de mettre en vert les cartes qui le
+# doivent, et leur ajoute la possibilité d'être déplacées.
+
+
+def cartes_vertes(matrice):
+    for i in matrice:
+        # L'indice 0 des sous-tableau de tab contient la carte qui peut
+        # être déplacée, qu'il faut mettre en vert
+        cas = document.querySelector("#case" + str(i[0]))
+        cas.setAttribute("style", "background-color: lime")
+
+        # Ligne de la matrice contenant l'indice de la case qui peut être
+        # bougée et l'indice de l'endroit où elle peut être déplacée
+        cases = i
+
+        cas.setAttribute(
+            "onclick",
+            "bouger(" + str(cases[0]) + "," + str(cases[1]) + ")",
+        )
+
+
+# La procédure 'nombres_a_noms' ne prend pas de paramètre. Elle utilise les
+# variables globales cartes_br et noms_cartes afin d'associer les chiffres du
+# tableau cartes_br aux indices du tableau noms_cartes afin de mélanger
+# noms_cartes de la même manière que cartes_br. Elle retourne alors un nouveau
+# tableau, un doublon de carte_br, mais avec le nom des cartes.
+
+
+def nombres_a_noms():
+    tab_noms = []
+    for i in cartes_br:
+        for k in range(len(noms_cartes)):
+            if k == i:
+                # Crée un nouveau tableau mélangé, avec le nom des cartes
+                tab_noms.append(noms_cartes[k])
+    return tab_noms
+
+
+# La procédure 'bouger' prend en paramètre un indice d'origine et un indice de
+# destination. Elle utilise le tableau global cartes_br et échange l'élément
+# à l'indice d'origne avec l'élément à l'indice de destination. Ensuite,
+# elle met à jour l'affichage du jeu pour prendre en compte cette
+# modification, en appelant mise_a_jour_affichage..
+
+
+def bouger(origine, destination):
+    temp = cartes_br[origine]
+    cartes_br[origine] = cartes_br[destination]
+    cartes_br[destination] = temp
+
+    mise_a_jour_affichage()
+
+
+# La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
+# liste contenant toutes les cartes d'un jeu de cartes classique en ordre
+# croissant en couleur, commençant par le trèfle (C), le carreaux (D), le coeur
+# (H), puis le pique (S). Ce paquet ne contient pas de Jokers. Pour ce faire,
+# la fonction cycle au travers des quatres couleurs, et leur ajoute les
+# valeurs. De plus, cette fonction ajoute les figures et les as. Le paquet
+# complet est retourné.
+
+
+def paquet_cartes():
+    # Tableau qui contiendra toutes les cartes
+    noms_cartes = []
+
+    # Tableau contenant toutes les couleurs, en anglais
+    noms_couleurs = ["C", "D", "H", "S"]
+
+    # Création de la liste de toutes les valeurs de cartes, dans toutes les
+    # couleurs. Commencer par cycler au travers de toutes les valeurs.
+    for i in range(1, 14):
+        # Cycler au travers des 4 couleurs
+        for couleur in noms_couleurs:
+            # Si c'est un as, ajouter A
+            if i == 1:
+                noms_cartes.append("A" + couleur)
+
+            # Si c'est un valet, ajouter J
+            elif i == 11:
+                noms_cartes.append("J" + couleur)
+
+            # Si c'est une dame, ajouter Q
+            elif i == 12:
+                noms_cartes.append("Q" + couleur)
+
+            # Si c'est un roi, ajouter K
+            elif i == 13:
+                noms_cartes.append("K" + couleur)
+
+            # Si c'est une chiffre normal
+            else:
+                noms_cartes.append(str(i) + couleur)
+    return noms_cartes
+
+
+# La fonction 'brasser' prend en paramètre un tableau (tab) ne contenant que
+# des éléments allant de 0 à 51 en ordre croissant. Ce tableau sera
+# mélangé selon le principe suivant : échangeons le dernier élément n du
+# tableau et échangeons le avec un élément aléatoire le précédant. Puis,
+# même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
+# La fonction retourne ce tableau mélangé.
+
+
+def brasser(tableau):
+    for i in range(len(tableau)):
+        # Variable permettant de cycler au travers des éléments du tableau, en
+        # partant par la fin.
+        indice_dernier_element = len(tableau) - 1 - i
+
+        # Choix aléatoire précédant le dernier élément
+        aleatoire = math.floor(random.random() * len(tableau) - 1 - i)
+
+        # Échanger les éléments
+        temp = tableau[indice_dernier_element]
+        tableau[indice_dernier_element] = tableau[aleatoire]
+        tableau[aleatoire] = temp
+
+    return tableau
+
+
+# La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères
+# non vide représentant le nom des cartes (tab_valeurs), un entier
+# correspondand à l'indice du premier élément de la ligne active (case). Elle
+# retourne le code HTML permettant d'afficher une ligne d'un tableau HTML avec
+# chaque carte. Elle assigne une image à chaque nom présent dans le tableau
+# tab_valeur. De plus, elle retire les as, les transformant en cases vides.
+# Elle retourne la chaîne de caractères correspondant à une ligne du jeu en
+# HTML, soit un tableau d'images.
+
+
+def lignes(tab_valeurs, case):
+    ligne = ""
+
+    for i in tab_valeurs:
+        # Cas où la carte est un as. Mettre 'absent' dans le code de l'image
+        if "A" in i:
+            ligne += (
+                """<td id=case""" + str(case) + """><img src="cards/absent.svg"></td>"""
+            )
+
+        # Cas pour toutes les autres cartes
+        else:
+            ligne += (
+                """<td id=case"""
+                + str(case)
+                + """><img src="cards/"""
+                + i
+                + """.svg"></td>"""
+            )
+        case += 1  # Ajustement de la case, pour la prochaine carte
+
+    return ligne
 
 
 # La procédure 'brasser_cartes' ne prend pas de paramètres. Elle brasse les
@@ -141,6 +361,7 @@ def mise_a_jour_affichage():
 # qui contient le nombre de brassage restant à la partie, ainsi que cartes_br
 # contenant les numéros des cartes brasés. Ensuite, elle modifie l'affichage
 # du jeu en appelant mise_a_jour_affichage.
+
 
 def brasser_cartes():
     global brasse_restant
@@ -165,20 +386,18 @@ def brasser_cartes():
 
     # Copie du tableau cartes_br
     cartes_br_copie = cartes_br.copy()
-    
-    # Tableau de cartes enlevées 
+
+    # Tableau de cartes enlevées
     tab_enleve = []
-    
+
     # Enlever les cartes qui sont sont en ordre croissant
     for i in range(len(lignes)):
-        
         # Les cartes qui on une valeurs de 99, sont en ordre
         if lignes[i] == 99:
-            
             # Enlever les cartes qui sont en ordre du tableau qui
             # sera ensuite brassé, afin de les garder en place
             cartes_br_copie.remove(cartes_br[i])
-            
+
             # Ajouter la carte enlevée dans le tableau des cartes enlevées
             tab_enleve.append(i)
 
@@ -189,10 +408,10 @@ def brasser_cartes():
     for i in tab_enleve:
         cartes_br_copie.insert(i, cartes_br[i])
 
-    # Actualiser le paquet de carte brassé avec le nouveau paquet de carte qui 
+    # Actualiser le paquet de carte brassé avec le nouveau paquet de carte qui
     # conserve la place des cartes qui étaient en ordre.
     cartes_br = cartes_br_copie
-    
+
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
 
@@ -205,20 +424,18 @@ def brasser_cartes():
 # retourne le tableaun modifié, avec des 99 à la place des éléments biens 
 # placés.
 def en_ordre(tab):
-    
-    # Copie du tableau en paramètre 
+    # Copie du tableau en paramètre
     ligne_elem_croissant = tab.copy()
-    
+
     # Initialisation de l'élément précédent
     elem_precedant = ligne_elem_croissant[0]
-    
+
     # Index des cartes du tableau
     index = 1
-    
+
     # Détecte si la première carte du tableau est de valeur 2, soit que
     # la valeur // 4 donne 1.
     if ligne_elem_croissant[0] // 4 == 1 or ligne_elem_croissant[0] == 8:
-        
         # Remplace le 2 par 99 (chiffre pour représenté que la carte est en ordre)
         ligne_elem_croissant.insert(index - 1, 99)
         ligne_elem_croissant.remove(ligne_elem_croissant[index])
@@ -228,17 +445,17 @@ def en_ordre(tab):
             if elem == elem_precedant + 4:
                 ligne_elem_croissant.insert(index, 99)
                 ligne_elem_croissant.remove(ligne_elem_croissant[index + 1])
-                
+
             # Si la carte suivant la carte de valeur 2 n'est pas en ordre, alors
             # ça ne sert à rien de vérifier les autres cartes de la ligne.
             else:
                 break
-            
+
             index += 1
-            
+
             # Garder en mémoire l'élément précédant
             elem_precedant = elem
-        
+
     return ligne_elem_croissant
 
 # Tests unitaires de la fonction 'en_ordre()'
@@ -499,24 +716,21 @@ def bouger(origine, destination):
 # aléatoire de cartes_br, cette fonction ne possède pas de tests unitaires.
 
 def voisins_as(noms_cartes_brasse):
-    
-    index = 0 # Variable comparant les indices
+    index = 0  # Variable comparant les indices
 
     # Tableau contenant les indices des voisins des as
     index_carte_suivante = []
 
     # Passe à travers toutes les cartes du paquet
     for carte in cartes_br:
-        
         # Trouver l'indice d'une carte dans le paquet mélangé
         index = trouver_indice(cartes_br, carte)
-        
+
         # Si la carte est un AS
         if carte // 4 == 0:
-            
             # Nom de la carte
             valeur_carte = noms_cartes_brasse[index]
-            
+
             # Indice de ce nom de carte dans le paquet ordonné avec les
             # noms de cartes
             index_noms_cartes = trouver_indice(noms_cartes, valeur_carte)
@@ -528,12 +742,12 @@ def voisins_as(noms_cartes_brasse):
                     index_carte_suivante.append(
                         [trouver_indice(cartes_br, deux), index]
                     )
-                    
+
             # Si il y a plusieurs AS à la suite de l'autre
             if cartes_br[index - 1] // 4 == 0:
                 continue
-            
-            # Si la carte est un roi, continue car rien ne peut suivre cette 
+
+            # Si la carte est un roi, continue car rien ne peut suivre cette
             # carte
             if cartes_br[index - 1] + 4 > 51:
                 continue
@@ -558,19 +772,17 @@ def voisins_as(noms_cartes_brasse):
     return index_carte_suivante
 
 
-# La fonction 'trouver_indice' prend en paramètre un tableau (tab) et un 
+# La fonction 'trouver_indice' prend en paramètre un tableau (tab) et un
 # élément à chercher dans ce tableau (a_trouver). Si l'élément n'est pas
-# présent dans le tableau, la fonction retourne False. Sinon, cette 
+# présent dans le tableau, la fonction retourne False. Sinon, cette
 # fonction retourne l'indice de l'élément à chercher.
 
 def trouver_indice(tab, a_trouver):
-    
     # Cas si le tableau est vide
     if len(tab) == 0:
         return False
-    
+
     else:
-        
         # Si on trouve a_trouver
         for i in range(len(tab)):
             if tab[i] == a_trouver:
@@ -604,13 +816,13 @@ def test_trouver_indice():
 
 def partie_gagne():
     global cartes_br
-    
+
     # Création de ligne du jeu, avec carte en ordre retiré des tableaux
     tab_cartes = en_ordre(cartes_br[:13])
     ligne2 = en_ordre(cartes_br[13:26])
     ligne3 = en_ordre(cartes_br[26:39])
     ligne4 = en_ordre(cartes_br[39:])
-    
+
     # Combiner les quatres lignes dans un tableau
     for i in ligne2:
         tab_cartes.append(i)
@@ -618,22 +830,21 @@ def partie_gagne():
         tab_cartes.append(i)
     for i in ligne4:
         tab_cartes.append(i)
-    
-    # Tableau de cartes enlevées 
+
+    # Tableau de cartes enlevées
     tab_carte_en_ordre = []
-    
+
     # Ajouter les cartes qui sont en ordre croissant
     for i in range(len(tab_cartes)):
-        
         # Les cartes qui on une valeurs de 99, sont en ordre (provient de la
         # fonction en_ordre)
         if tab_cartes[i] == 99:
             # Ajouter la cartes en ordre dans le tableau
             tab_carte_en_ordre.append(i)
-    
-    # Vérifie si les 52 cartes sont en ordre    
+
+    # Vérifie si les 52 cartes sont en ordre
     if len(tab_carte_en_ordre) == 52:
-        return True # Cas de victoire
+        return True  # Cas de victoire
     else:
         return False # Cas de non victoire
 
