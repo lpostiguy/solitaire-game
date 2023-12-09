@@ -521,43 +521,45 @@ def trouver_indice(tab, a_trouver):
         return False
 
 
-# Fonction qui détecte si la partie est gagné. (Toute les cartes du jeu sont en
-# ordres sur chaqu'une des lignes de cartes)
-# La fonction retourne un boléen True, pour partie gagnée et False, pour partie
-# pas gagnée.
+# La fonction 'partie_gagne' ne prend pas de paramètre. Cette fonction détecte
+# si une partie est gagnée, soit si toutes les cartes du jeu sont en ordres
+# croissant, en couleur. La fonction retourne un booléen; True pour une partie
+# gagnée et False pour une partie non gagnée.
+
 def partie_gagne():
     global cartes_br
     
     # Création de ligne du jeu, avec carte en ordre retiré des tableaux
-    cart = en_ordre(cartes_br[:13])
+    tab_cartes = en_ordre(cartes_br[:13])
     ligne2 = en_ordre(cartes_br[13:26])
     ligne3 = en_ordre(cartes_br[26:39])
     ligne4 = en_ordre(cartes_br[39:])
-
-    # Combiner les 4 lignes dans un tableau
+    
+    # Combiner les quatres lignes dans un tableau
     for i in ligne2:
-        cart.append(i)
+        tab_cartes.append(i)
     for i in ligne3:
-        cart.append(i)
+        tab_cartes.append(i)
     for i in ligne4:
-        cart.append(i)
+        tab_cartes.append(i)
     
     # Tableau de cartes enlevées 
     tab_carte_en_ordre = []
     
-    # Ajouter les cartes qui sont en ordre croissantes
-    for i in range(len(cart)):
+    # Ajouter les cartes qui sont en ordre croissant
+    for i in range(len(tab_cartes)):
+        
         # Les cartes qui on une valeurs de 99, sont en ordre (provient de la
         # fonction en_ordre)
-        if cart[i] == 99:
-            # Ajouter la cartes en ordres dans le tableau
+        if tab_cartes[i] == 99:
+            # Ajouter la cartes en ordre dans le tableau
             tab_carte_en_ordre.append(i)
     
     # Vérifie si les 52 cartes sont en ordre    
     if len(tab_carte_en_ordre) == 52:
-        return True
+        return True # Cas de victoire
     else:
-        return False
+        return False # Cas de non victoire
 
 
 # Test unitaires ------------------------------------------------------
