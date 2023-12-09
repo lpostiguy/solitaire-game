@@ -821,7 +821,6 @@ def partie_gagne():
     if len(tab_carte_en_ordre) == 48:
         return True  # Cas de victoire
     else:
-        print(tab_carte_en_ordre)
         return False # Cas de non victoire
 
 
