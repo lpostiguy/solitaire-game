@@ -95,6 +95,13 @@ def mise_a_jour_affichage():
         #jeu table { float:none; }
         #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
         #jeu table td img { height:140px; }
+        #jeu {padding-left: 10px;}
+        #controles {padding-left: 10px;}
+        #controles {padding-top: 5px;}
+        #brasser {padding-top: 5px;}
+        #brasser {padding-bottom: 5px;}
+        #boutton {padding-top: 5px;}
+        
       </style>
       <div id="jeu">
         <table>
@@ -106,10 +113,12 @@ def mise_a_jour_affichage():
       </div>
     <div id="controles">
         <div id="brasser"></div>
+        <div id="boutton">
         <button id="new-games" onclick="nouvelle_partie()">Nouvelle partie
         </button>
+        </div>
     </div>"""
-    
+
     # Affichage du bouton pour brasser les cartes
     bouton_brasser()
 
@@ -131,9 +140,13 @@ def mise_a_jour_affichage():
 
 def bouton_brasser():
     brasseur = document.querySelector("#brasser")
-
+    
+    # Si le joueur à gagné la partie
+    if partie_gagne():
+        brasseur.innerHTML = "Vous avez réussi! Bravo!"
+    
     # Si le joueur n'à plus de brassage de cartes restant
-    if brasse_restant == 0:
+    elif brasse_restant == 0:
         brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
 
     # Si le joueur à encore des brassages de cartes restant
@@ -345,7 +358,7 @@ def brasser_cartes():
     # Tableau de cartes enlevées 
     tab_enleve = []
     
-    # Enlever les cartes qui sont bien placées
+    # Enlever les cartes qui sont sont en ordre croissant
     for i in range(len(lignes)):
         
         # Les cartes qui on une valeurs de 99, sont en ordre
@@ -505,6 +518,45 @@ def trouver_indice(tab, a_trouver):
             if tab[i] == a_trouver:
                 return i
         # Si l'élément ne fut pas trouvé
+        return False
+
+
+# Fonction qui détecte si la partie est gagné. (Toute les cartes du jeu sont en
+# ordres sur chaqu'une des lignes de cartes)
+# La fonction retourne un boléen True, pour partie gagnée et False, pour partie
+# pas gagnée.
+def partie_gagne():
+    global cartes_br
+    
+    # Création de ligne du jeu, avec carte en ordre retiré des tableaux
+    cart = en_ordre(cartes_br[:13])
+    ligne2 = en_ordre(cartes_br[13:26])
+    ligne3 = en_ordre(cartes_br[26:39])
+    ligne4 = en_ordre(cartes_br[39:])
+
+    # Combiner les 4 lignes dans un tableau
+    for i in ligne2:
+        cart.append(i)
+    for i in ligne3:
+        cart.append(i)
+    for i in ligne4:
+        cart.append(i)
+    
+    # Tableau de cartes enlevées 
+    tab_carte_en_ordre = []
+    
+    # Ajouter les cartes qui sont en ordre croissantes
+    for i in range(len(cart)):
+        # Les cartes qui on une valeurs de 99, sont en ordre (provient de la
+        # fonction en_ordre)
+        if cart[i] == 99:
+            # Ajouter la cartes en ordres dans le tableau
+            tab_carte_en_ordre.append(i)
+    
+    # Vérifie si les 52 cartes sont en ordre    
+    if len(tab_carte_en_ordre) == 52:
+        return True
+    else:
         return False
 
 
