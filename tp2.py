@@ -1,21 +1,43 @@
 # Louis-Philippe Ostiguy
-# Noah Taillon
+# Noah Tremblay Taillon
 # 10 décembre 2023
 #
-# Description du programme
+# Ce programme, appelé dans un code HTML, permet de modifier ce code HTML afin
+# de lancer unee partie d'Addiction Solitaire. Dans ce jeu, le joueur a comme
+# but de placer en ordre de gauche à droite les carte allant du 2 jusqu'au
+# roi, et ce en les les classant en couleur. Pour gagner, le joueur doit avoir
+# réussi à placer toutes les cartes en ordre. Pour cela, il dispose de trois
+# brasssages, permettant de brasser toutes les cartes sauf celles déjà bien
+# placées. Les cartes pouvant être déplacées sont affichées en vert. Lorsque
+# le joueur clique dessus, cette carte se place derrière la carte de la même
+# couleur la précédant; par exemple, appuyer sur le 6 de coeur en surbrillance
+# verte placera cette carte après le 5 de coeur. Le joueur perd lorsque'il ne
+# peut plus brasser les cartes, et qu'aucune carte ne peut être déplacée (donc
+# aucune carte n'est verte).
+
 
 import random
 import math
 
 
-# Permet de faire un nouvelle partie
+# La procédure nouvelle_partie ne prend pas de paramètre. Lorsque le bouton
+# HTML 'nouvelle partie' est cliqué, cette fonction est appelée afin de créer
+# une nouvelle partie. Bien que cette fonction ne fait qu'appeler init(), elle
+# permet de mieux expliciter ce qui se passe à l'appuie du bouton.
+
 def nouvelle_partie():
     init()
 
 
-# Procédure qui permet d'afficher et de jouer au jeu de Solitaire Addiction
+# La procédure init ne prend pas de paramètre. Elle permet de créer une 
+# nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure 
+# crée un paquet de carte, avec des nombres de 0 à 51, brasse ce paquet, et
+# associe ces numéros brassés aux noms des cartes correspondantes. Elle
+# appelle la procédure mise_a_jour_affichage, qui permet de lancer le jeu.
+
 def init():
-    # Inicier les variables globales
+    
+    # Initier les variables globales
     global cartes_br
     global noms_cartes
     global noms_cartes_br
@@ -24,9 +46,9 @@ def init():
     # Nombre de brassage de cartes restant
     brasse_restant = 3
 
-    # Tableau qui contiendra les cardes ordonnées
+    # Tableau qui contiendra les numéros des cartes ordonnées
     cartes = []
-
+    
     # Tableau  ordonnée de toutes les cartes
     for i in range(52):
         cartes.append(i)
@@ -39,56 +61,30 @@ def init():
     noms_cartes = paquet_cartes()
 
     # Paquet brassé avec le noms des cartes
-    noms_cartes_br = []
-
-    # Boucle qui permet de trouver l'élément associé aux noms des cartes
-    # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
-    # 0 est retrouvé dans cartes_br, et son indice est retourné.
-    for i in cartes_br:
-        for k in range(len(noms_cartes)):
-            if k == i:
-
-                # Crée un nouveau tableau mélangé, avec le nom des cartes
-                noms_cartes_br.append(noms_cartes[k])
+    noms_cartes_br = nombres_a_noms()
     
     # Met à jour le contenu de la page HTML
     mise_a_jour_affichage()
 
 
-# Procédure qui met à jour le contenu HTML de la page web.
-# La procédure prend en paramètres 3 tableau, un tableau de cartes
-# brassées (sous forme de chiffre, 0 à 52), un tableau contenant le
-# numéro et l'enseigne des cartes, en ordre, et un tableau contenant
-# le noms_des cartes brassées.
+# La procédure mise_a_jour_affichage ne prend pas de paramètre. Cette procédure
+# modifie le code HTML de la page web, afin de mettre à jour le jeu au fur et 
+# à mesure de l'avancement du joueur.
+
 def mise_a_jour_affichage():
 
     # Paquet brassé avec le noms des cartes
-    noms_cartes_br = []
-
-    # Boucle qui permet de trouver l'élément associé aux noms des cartes
-    # Donc, l'as de diamonds (AD) est à l'indice 0 de noms_cartes. L'élément
-    # 0 est retrouvé dans cartes_br, et son indice est retourné.
-    for i in cartes_br:
-        for k in range(len(noms_cartes)):
-            if k == i:
-
-                # Crée un nouveau tableau mélangé, avec le nom des cartes
-                noms_cartes_br.append(noms_cartes[k])
+    noms_cartes_br = nombres_a_noms()
     
-    
-    # Tableau qui contiendra les cardes ordonnées
-
-    # Création des éléments HTML. Ces lignes n'ont déjà plus les as
-    # Moyen de faire ça plus efficacement?
+    # Création des éléments HTML.
     ligne1 = lignes(noms_cartes_br[:13], 0)
     ligne2 = lignes(noms_cartes_br[13:26], 13)
     ligne3 = lignes(noms_cartes_br[26:39], 26)
     ligne4 = lignes(noms_cartes_br[39:], 39)
 
-    # Changer le contenu HTML de l'élément racine
+    # Changer le contenu HTML de l'élément ayant l'ID 'cb-body'
     racine = document.querySelector("#cb-body")
-    racine.innerHTML = (
-        """
+    racine.innerHTML = """
       <style>
         #jeu table { float:none; }
         #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
@@ -96,35 +92,18 @@ def mise_a_jour_affichage():
       </style>
       <div id="jeu">
         <table>
-          <tr>
-            """
-        + ligne1
-        + """
-          </tr>
-          <tr>
-            """
-        + ligne2
-        + """
-          </tr>
-          <tr>
-            """
-        + ligne3
-        + """
-          </tr>
-          <tr>
-            """
-        + ligne4
-        + """
-          </tr>
+          <tr>""" + ligne1 + """</tr>
+          <tr>""" + ligne2 + """</tr>
+          <tr>""" + ligne3 + """</tr>
+          <tr>""" + ligne4 + """</tr>
         </table>
       </div>
-          <div id="controles">
-    <div id="brasser">
-    </div>
-    <button id="new-games" onclick="nouvelle_partie()">Nouvelle partie</button>
-  </div>
-      """
-    )
+    <div id="controles">
+        <div id="brasser"></div>
+        <button id="new-games" onclick="nouvelle_partie()">Nouvelle partie
+        </button>
+    </div>"""
+    
     brasseur = document.querySelector("#brasser")
 
     # Si le joueur n'à plus de brassage de cartes restant
@@ -134,23 +113,28 @@ def mise_a_jour_affichage():
     # Si le joueur à encore des brassages de cartes restant
     else:
         brasseur.innerHTML = (
-            """
-        Vous pouvez encore <button id="brasser_cartes" onclick="brasser_cartes()">
-        brasser les cartes</button>
-        """
-            + str(brasse_restant)
-            + " fois"
-        )
+            """Vous pouvez encore <button id="brasser_cartes" 
+            onclick="brasser_cartes()"> brasser les cartes</button> """ 
+            + str(brasse_restant) + " fois")
 
-    # Changer la couleur de fond de la case 0
+    # Matrice où les lignes sont composés de l'élément 0 qui est l'indice de 
+    # la carte à mettre en vert, et l'élément 1 qui est l'indice où cette 
+    # carte peut être déplacée.
+    matrice_déplacements = voisins_as(noms_cartes_br)
+    
+    # Modification du code HTML pour mettre les cartes en verts et les rendre
+    # cliquables
+    cartes_vertes(matrice_déplacements)
 
-    # matrice retourne une matrice où les sous-tableaux sont composés de
-    # l'indice 0 qui est l'indice de la carte à mettre en vert, et l'indice
-    # 1 qui est la position où cette carte peut être déplacée.
-    matrice = voisins_as(noms_cartes_br)
 
-    # TODO: en plus de les afficher en vert, il faut ajouter la fonction clic()
-    # aux cartes pouvant être déplacées
+# La procédure cartes_vertes prend en paramètre une matrice. L'élément à 
+# l'indice 0 de chaque ligne de la matrice corresopnd à l'indice d'une carte
+# qui doit être mise en vert. L'indice 1 de chaque ligne correspond à l'indice
+# de la position où cette carte peut être déplacée, si elle est cliquée. Cette
+# procédure modifie le code HTML afin de mettre en vert les cartes qui le 
+# doivent, et leur ajoute la possibilité d'être déplacées.
+
+def cartes_vertes (matrice):
     for i in matrice:
         
         # L'indice 0 des sous-tableau de tab contient la carte qui peut
@@ -170,7 +154,23 @@ def mise_a_jour_affichage():
             + str(cases[1])
             + ")",
         )
+    
 
+# Cette procédure ne prend pas de paramètre. Elle utilise les variables
+# globales cartes_br et noms_cartes afin d'associer les chiffres du tableau
+# cartes_br aux indices du tableau noms_cartes afin de mélanger noms_cartes
+# de la même manière que cartes_br. Elle retourne alors un nouveau tableau,
+# un doublon de carte_br, mais avec le nom des cartes.
+
+def nombres_a_noms ():
+    tab_noms = []
+    for i in cartes_br:
+        for k in range(len(noms_cartes)):
+            if k == i:
+
+                # Crée un nouveau tableau mélangé, avec le nom des cartes
+                tab_noms.append(noms_cartes[k])
+    return tab_noms
 
 # Fonction pour bouger une carte. Destination = l'indice où la carte
 # peut aller.
@@ -255,7 +255,8 @@ def lignes(tab, case):
         # Cas où la carte est un as
         if "A" in i:
             ligne += (
-                """<td id=case""" + str(case) + """><img src="cards/absent.svg"></td>"""
+                """<td id=case""" + str(case) 
+                + """><img src="cards/absent.svg"></td>"""
             )
         else:
             ligne += (
