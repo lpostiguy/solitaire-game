@@ -3,11 +3,11 @@
 # 10 décembre 2023
 #
 # Ce programme, appelé dans un code HTML, permet de modifier ce code HTML afin
-# de lancer unee partie d'Addiction Solitaire. Dans ce jeu, le joueur a comme
-# but de placer en ordre de gauche à droite les carte allant du 2 jusqu'au
+# de lancer une partie d'Addiction Solitaire. Dans ce jeu, le joueur a comme
+# but de placer en ordre de gauche à droite les cartes allant du 2 jusqu'au
 # roi, et ce en les les classant en couleur. Pour gagner, le joueur doit avoir
-# réussi à placer toutes les cartes en ordre. Pour cela, il dispose de trois
-# brasssages, permettant de brasser toutes les cartes sauf celles déjà bien
+# réussis à placer toutes les cartes en ordre. Pour cela, il dispose de trois
+# brassages, permettant de brasser toutes les cartes sauf celles déjà bien
 # placées. Les cartes pouvant être déplacées sont affichées en vert. Lorsque
 # le joueur clique dessus, cette carte se place derrière la carte de la même
 # couleur la précédant; par exemple, appuyer sur le 6 de coeur en surbrillance
@@ -28,7 +28,7 @@ import math
 
 # La procédure 'init' ne prend pas de paramètre. Elle permet de créer une
 # nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure
-# crée un paquet de carte, avec des nombres de 0 à 51, brasse ce paquet, et
+# crée un paquet de cartes, avec des nombres de 0 à 51, brasse ce paquet, et
 # associe ces numéros brassés aux noms des cartes correspondantes. Elle
 # appelle la procédure mise_a_jour_affichage, qui permet de lancer le jeu.
 
@@ -39,13 +39,13 @@ def init():
     global noms_cartes_br
     global brasse_restant
 
-    # Nombre de brassage de cartes restant
+    # Nombre de brassages de cartes restant
     brasse_restant = 30
 
     # Tableau qui contiendra les numéros des cartes ordonnées
     cartes = []
 
-    # Tableau  ordonnée de toutes les cartes
+    # Tableau  ordonné de toutes les cartes
     for i in range(52):
         cartes.append(i)
     
@@ -53,14 +53,14 @@ def init():
     cartes_br = brasser(cartes)
     
 
-    # Tableau contenant tous les noms des cartes, en ordres croissant et en
+    # Tableau contenant tous les noms des cartes, en ordres croissants et en
     # couleur
     noms_cartes = paquet_cartes()
 
     # Paquet brassé avec le noms des cartes
     noms_cartes_br = nombres_a_noms()
 
-    # Met à jour le contenu de la page HTML
+    # Mets à jour le contenu de la page HTML
     mise_a_jour_affichage()
     
 
@@ -70,7 +70,7 @@ def init():
 
 def mise_a_jour_affichage():
     
-    # Paquet brassé avec le noms des cartes
+    # Paquet brassé avec le nom des cartes
     noms_cartes_br = nombres_a_noms()
 
     # Création des éléments HTML.
@@ -135,18 +135,18 @@ def mise_a_jour_affichage():
     # Affichage du bouton pour brasser les cartes
     bouton_brasser()
 
-    # Matrice où les lignes sont composés de l'élément 0 qui est l'indice de
+    # Matrice où les lignes sont composées de l'élément 0 qui est l'indice de
     # la carte à mettre en vert, et l'élément 1 qui est l'indice où cette
-    # carte peut être déplacée.
+    # carte peut-être déplacée.
     matrice_déplacements = voisins_as(noms_cartes_br)
 
-    # Modification du code HTML pour mettre les cartes en verts et les rendre
+    # Modification du code HTML pour mettre les cartes en vert et les rendre
     # cliquables
     cartes_vertes(matrice_déplacements)
 
 
 # La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
-# paramètre global brasse_restant, qui contient le nombre de brassage restant
+# paramètre global brasse_restant, qui contient le nombre de brassages restant
 # au joueur. Cette procédure modifie le code HTML de la page web pour changer
 # l'affichage du bouton brasser; s'il ne reste plus de brassage disponible,
 # le bouton disparait. Sinon, on affiche le bouton avec le compteur.
@@ -173,11 +173,11 @@ def bouton_brasser():
 
 
 # La procédure 'cartes_vertes' prend en paramètre une matrice. L'élément à
-# l'indice 0 de chaque ligne de la matrice corresopnd à l'indice d'une carte
+# l'indice 0 de chaque ligne de la matrice correspond à l'indice d'une carte
 # qui doit être mise en vert. L'indice 1 de chaque ligne correspond à l'indice
 # de la position où cette carte peut être déplacée, si elle est cliquée. Cette
 # procédure modifie le code HTML afin de mettre en vert les cartes qui le
-# doivent, et leur ajoute la possibilité d'être déplacées.
+# doivent, et leur ajoutent la possibilité d'être déplacées.
 
 def cartes_vertes(matrice):
     for i in matrice:
@@ -214,7 +214,7 @@ def nombres_a_noms():
 
 # La procédure 'bouger' prend en paramètre un indice d'origine et un indice de
 # destination. Elle utilise le tableau global cartes_br et échange l'élément
-# à l'indice d'origne avec l'élément à l'indice de destination. Ensuite,
+# à l'indice d'origine avec l'élément à l'indice de destination. Ensuite,
 # elle met à jour l'affichage du jeu pour prendre en compte cette
 # modification, en appelant mise_a_jour_affichage..
 
@@ -228,9 +228,9 @@ def bouger(origine, destination):
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
 # liste contenant toutes les cartes d'un jeu de cartes classique en ordre
-# croissant en couleur, commençant par le trèfle (C), le carreaux (D), le coeur
+# croissant en couleur, commençant par le trèfle (C), le carreau (D), le coeur
 # (H), puis le pique (S). Ce paquet ne contient pas de Jokers. Pour ce faire,
-# la fonction cycle au travers des quatres couleurs, et leur ajoute les
+# la fonction cycle au travers des quatre couleurs, et leur ajoute les
 # valeurs. De plus, cette fonction ajoute les figures et les as. Le paquet
 # complet est retourné.
 
@@ -271,7 +271,7 @@ def paquet_cartes():
 # La fonction 'brasser' prend en paramètre un tableau (tab) ne contenant que
 # des éléments allant de 0 à 51 en ordre croissant. Ce tableau sera
 # mélangé selon le principe suivant : échangeons le dernier élément n du
-# tableau et échangeons le avec un élément aléatoire le précédant. Puis,
+# tableau et échangeons-le avec un élément aléatoire le précédant. Puis,
 # même chose avec n-1, jusqu'à ce que tous les éléments aient été échangés.
 # La fonction retourne ce tableau mélangé.
 
@@ -294,7 +294,7 @@ def brasser(tableau):
 
 # La fonction 'ligne' prend en paramètre un tableau de chaînes de caractères
 # non vide représentant le nom des cartes (tab_valeurs), un entier
-# correspondand à l'indice du premier élément de la ligne active (case). Elle
+# correspondant à l'indice du premier élément de la ligne active (case). Elle
 # retourne le code HTML permettant d'afficher une ligne d'un tableau HTML avec
 # chaque carte. Elle assigne une image à chaque nom présent dans le tableau
 # tab_valeur. De plus, elle retire les as, les transformant en cases vides.
@@ -327,10 +327,10 @@ def lignes(tab_valeurs, case):
 
 
 # La procédure 'brasser_cartes' ne prend pas de paramètres. Elle brasse les
-# cartes en tenant compte le nombre de brassage restant au joueur, modifiant
+# cartes en tenant compte le nombre de brassages restant au joueur, modifiant
 # ce nombre à chaque appel de la procédure. Elle prend aussi en compte les
 # cartes déjà en ordre. Elle modifie les variables globales brasse_restant,
-# qui contient le nombre de brassage restant à la partie, ainsi que cartes_br
+# qui contient le nombre de brassages restant à la partie, ainsi que cartes_br
 # contenant les numéros des cartes brasés. Ensuite, elle modifie l'affichage
 # du jeu en appelant mise_a_jour_affichage.
 
@@ -363,7 +363,7 @@ def brasser_cartes():
 
     # Enlever les cartes qui sont sont en ordre croissant
     for i in range(len(lignes)):
-        # Les cartes qui on une valeurs de 99, sont en ordre
+        # Les cartes qui on une valeur de 99, sont en ordre
         if lignes[i] == 99:
             # Enlever les cartes qui sont en ordre du tableau qui
             # sera ensuite brassé, afin de les garder en place
@@ -379,11 +379,11 @@ def brasser_cartes():
     for i in tab_enleve:
         cartes_br_copie.insert(i, cartes_br[i])
 
-    # Actualiser le paquet de carte brassé avec le nouveau paquet de carte qui
+    # Actualiser le paquet de cartes brassé avec le nouveau paquet de cartes qui
     # conserve la place des cartes qui étaient en ordre.
     cartes_br = cartes_br_copie
 
-    # Met à jour le contenu de la page HTML
+    # Mets à jour le contenu de la page HTML
     mise_a_jour_affichage()
 
 
@@ -391,8 +391,8 @@ def brasser_cartes():
 # détecte les éléments (nombres entiers) qui sont en ordre croissant et qui ont
 # une incrémentation de +1 entre eux, partant à la valeur 2, et à partir du 
 # début du tableau. Les éléments en ordre sont remplacés par 99, un nombre 
-# arbitraire non ambigüe avec les valeurs du paquet de cartes. La fonction 
-# retourne le tableaun modifié, avec des 99 à la place des éléments biens 
+# arbitraire non ambigu avec les valeurs du paquet de cartes. La fonction 
+# retourne le tableau modifié, avec des 99 à la place des éléments bien
 # placés.
 
 def en_ordre(tab):
@@ -406,15 +406,15 @@ def en_ordre(tab):
     index = 1
 
     # Détecte si la première carte du tableau est de valeur 2, soit que
-    # la valeur // 4 donne 1.
+    # la valeur // 4 donnes 1.
     if ligne_elem_croissant[0] // 4 == 1 or ligne_elem_croissant[0] == 8:
         
-        # Remplace le 2 par 99 (chiffre pour représenté que la carte 
+        # Remplace le 2 par 99 (chiffre pour représenter que la carte 
         # est en ordre)
         ligne_elem_croissant.insert(index - 1, 99)
         ligne_elem_croissant.remove(ligne_elem_croissant[index])
 
-        # Détecte si les cartes sont en ordres croissant, +1 entre chaque carte
+        # Détecte si les cartes sont en ordres croissants, +1 entre chaque carte
         for elem in ligne_elem_croissant[1:]:
             if elem == elem_precedant + 4:
                 ligne_elem_croissant.insert(index, 99)
@@ -541,7 +541,7 @@ def test_lignes():
 
 # La fonction 'paquet_cartes' ne prend pas de paramètre. Elle retourne une
 # liste contenant toutes les cartes d'un jeu de cartes classique en ordre
-# croissant en couleur, commençant par le trèfle (C), le carreaux (D), le coeur
+# croissant en couleur, commençant par le trèfle (C), le carreau (D), le coeur
 # (H), puis le pique (S). Ce paquet ne contient pas de Jokers. Pour ce faire,
 # la fonction cycle au travers des quatres couleurs, et leur ajoute les
 # valeurs. De plus, cette fonction ajoute les figures et les as. Le paquet
@@ -578,7 +578,7 @@ def paquet_cartes():
             elif i == 13:
                 noms_cartes.append("K" + couleur)
 
-            # Si c'est une chiffre normal
+            # Si c'est un chiffre normal
             else:
                 noms_cartes.append(str(i) + couleur)
     return noms_cartes
@@ -616,7 +616,7 @@ def nombres_a_noms ():
 
 
 # La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
-# paramètre global brasse_restant, qui contient le nombre de brassage restant
+# paramètre global brasse_restant, qui contient le nombre de brassages restant
 # au joueur. Cette procédure modifie le code HTML de la page web pour changer
 # l'affichage du bouton brasser; s'il ne reste plus de brassage disponible,
 # le bouton disparait. Sinon, on affiche le bouton avec le compteur.
@@ -645,7 +645,7 @@ def bouton_brasser():
 # qui doit être mise en vert. L'indice 1 de chaque ligne correspond à l'indice
 # de la position où cette carte peut être déplacée, si elle est cliquée. Cette
 # procédure modifie le code HTML afin de mettre en vert les cartes qui le 
-# doivent, et leur ajoute la possibilité d'être déplacées.
+# doivent, et leur ajoutent la possibilité d'être déplacées.
 
 def cartes_vertes (matrice):
     for i in matrice:
@@ -682,12 +682,12 @@ def bouger(origine, destination):
     mise_a_jour_affichage()
 
 
-# La fonction voisins_as prend en paramètre un tableau brassé ayant le noms des
+# La fonction voisins_as prend en paramètre un tableau brassé ayant le nom des
 # cartes (noms_cartes_brasse). Cette fonction trouve les as dans le paquet,
 # trouve la valeur de la carte la précédant, et la carte qui devrait aller à la
 # place de l'as. Elle retourne donc un tableau dont le premier élément est
 # l'indice de la carte pouvant être déplacée, et dont le deuxième élément est
-# l'indice de la position où elle peut être déplacée. Étant donnée le caractère
+# l'indice de la position où elle peut être déplacée. Étant donné le caractère
 # aléatoire de cartes_br, cette fonction ne possède pas de tests unitaires.
 
 def voisins_as(noms_cartes_brasse):
@@ -722,7 +722,7 @@ def voisins_as(noms_cartes_brasse):
             if cartes_br[index - 1] // 4 == 0:
                 continue
 
-            # Si la carte est un roi, continue car rien ne peut suivre cette
+            # Si la carte est un roi, continue, car rien ne peut suivre cette
             # carte
             if cartes_br[index - 1] + 4 > 51:
                 continue
@@ -786,7 +786,7 @@ def test_trouver_indice():
 # La fonction 'partie_gagne' ne prend pas de paramètre. Cette fonction détecte
 # si une partie est gagnée, soit si toutes les cartes du jeu sont en ordres
 # croissant, en couleur. La fonction retourne un booléen; True pour une partie
-# gagnée et False pour une partie non gagnée. Étant donnée le caractère
+# gagnée et False pour une partie non gagnée. Étant donné le caractère
 # aléatoire de cartes_br, cette fonction ne possède pas de tests unitaires.
 
 def partie_gagne():
@@ -821,10 +821,10 @@ def partie_gagne():
     if len(tab_carte_en_ordre) == 48:
         return True  # Cas de victoire
     else:
-        return False # Cas de non victoire
+        return False # Cas de non-victoire
 
 
-# Procédure qui effectue tous les test unitaires du programme.
+# Procédure qui effectue tous les tests unitaires du programme.
 
 def test_unitaires():
     
