@@ -24,7 +24,7 @@
 
 import random
 import math
-
+print(True)
 
 # La procédure 'init' ne prend pas de paramètre. Elle permet de créer une
 # nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure
@@ -40,7 +40,7 @@ def init():
     global brasse_restant
 
     # Nombre de brassages de cartes restant
-    brasse_restant = 30
+    brasse_restant = 3
 
     # Tableau qui contiendra les numéros des cartes ordonnées
     cartes = []
