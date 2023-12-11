@@ -24,7 +24,6 @@
 
 import random
 import math
-print(True)
 
 # La procédure 'init' ne prend pas de paramètre. Elle permet de créer une
 # nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure
@@ -717,6 +716,7 @@ def voisins_as(noms_cartes_brasse):
                     index_carte_suivante.append(
                         [trouver_indice(cartes_br, deux), index]
                     )
+                continue
 
             # Si il y a plusieurs AS à la suite de l'autre
             if cartes_br[index - 1] // 4 == 0:
