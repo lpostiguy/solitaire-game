@@ -1,5 +1,5 @@
-# Louis-Philippe Ostiguy
-# Noah Tremblay Taillon
+# Louis-Philippe Ostiguy 20274034
+# Noah Tremblay Taillon 20190661
 # 10 décembre 2023
 #
 # Ce programme, appelé dans un code HTML, permet de modifier ce code HTML afin
