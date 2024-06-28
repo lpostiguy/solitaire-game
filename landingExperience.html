@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Solitaire Game</title>
+    <link rel="stylesheet" href="codeboot.bundle.css" />
+    <style>
+      .background {
+        position: relative;
+        overflow: hidden;
+        background-color: #2e2e2e;
+      }
+
+      .background::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background-image: url('backgroundTile.svg');
+        opacity: 0.05;
+        transform: rotate(45deg);
+        z-index: 1;
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+      }
+    </style>
+    <script>
+      function changePage() {
+        window.location.href = "tp2.html";
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="background">
+      <div class="content">
+        <div style="display: flex; justify-content: center; height: 95vh">
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              justify-items: center;
+              color: #f9fff8;
+              text-align: center;
+            "
+          >
+            <img
+              style="height: 179px; width: 209px; margin: 0 auto 0 auto"
+              src="cardIcon.png"
+              alt="Card Icon"
+            />
+            <h1 style="font-size: 70px">Solitaire Game</h1>
+            <button
+              style="
+                background-color: #973233;
+                color: #f9fff8;
+                border: none;
+                border-radius: 15px;
+                padding: 10px;
+              "
+              onclick="changePage()"
+            >
+              <span style="font-size: x-large; font-weight: bold"> START </span>
+            </button>
+            <p>Mobile screen not supported yet</p>
+          </div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            color: #f9fff8;
+            margin: 0 30px 0 30px;
+          "
+        >
+          <p>Created by Louis-Philippe Ostiguy</p>
+          <p>V.2.0</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
