@@ -1,9 +1,8 @@
 # Louis-Philippe Ostiguy 20274034
-# Noah Tremblay Taillon 20190661
 # 10 décembre 2023
 #
 # Ce programme, appelé dans un code HTML, permet de modifier ce code HTML afin
-# de lancer une partie d'Addiction Solitaire. Dans ce jeu, le joueur a comme
+# de lancer une partie de Solitaire. Dans ce jeu, le joueur a comme
 # but de placer en ordre de gauche à droite les cartes allant du 2 jusqu'au
 # roi, et ce en les les classant en couleur. Pour gagner, le joueur doit avoir
 # réussis à placer toutes les cartes en ordre. Pour cela, il dispose de trois
@@ -26,7 +25,7 @@ import random
 import math
 
 # La procédure 'init' ne prend pas de paramètre. Elle permet de créer une
-# nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure
+# nouvelle partie de Solitaire. Pour ce faire, cette procédure
 # crée un paquet de cartes, avec des nombres de 0 à 51, brasse ce paquet, et
 # associe ces numéros brassés aux noms des cartes correspondantes. Elle
 # appelle la procédure mise_a_jour_affichage, qui permet de lancer le jeu.
@@ -213,16 +212,20 @@ def mise_a_jour_affichage():
             background-color: #973233;
             color: #F9FFF8;
         }
-
-        #boutton {
-            padding-top: 5px;
-        }
         
-        #new-games {
+        .new-games {
             border-radius: 6px;
             border: none;
             background-color: #973233;
             color: #F9FFF8;
+        }
+        
+        #pop-up-won {
+            display: none;
+        }
+        
+        #pop-up-game-over {
+            display: none;
         }
     </style>
     <div id="ecran">
@@ -232,19 +235,36 @@ def mise_a_jour_affichage():
         <div id="small-screen">
             <h3>Screen is to small, try on a bigger device!</h3>
         </div>
-        <div id="jeu">
-            <div>
-                <table>
-                <tr>""" + ligne1 + """</tr>
-                <tr>""" + ligne2 + """</tr>
-                <tr>""" + ligne3 + """</tr>
-                <tr>""" + ligne4 + """</tr>
-                </table>
+            <div id="grey-background">
             </div>
-            <div id="controles">
-                <div id="brasser"></div>
-                <div id="boutton">
-                    <button id="new-games" onclick="init()">NEW GAME</button>
+            <div id="pop-up-won">
+                <h1 style="color: #9BFA79; font-weight: bold; padding:10px 0 10px 0"> YOU WON! </h1>
+                <p style="color: #F9FFF8; font-size: medium; width: 380px; margin: 0 auto 0 auto; padding:10px 0 20px 0"> Congratulations on your win at the Solidaire card game! Keep up the great play and enjoy your victory! </p>
+                <button class="new-games" style="width: 150px; height: 50px; font-weight: bold; font-size: large; margin: 0 auto 0 auto; padding:10px 0 10px 0" onclick="init()">
+                    NEW GAME
+                </button>
+            </div>
+            <div id="pop-up-game-over">
+                <h1 style="color: #D2000F; font-weight: bold; padding:10px 0 10px 0"> GAME OVER! </h1>
+                <p style="color: #F9FFF8; font-size: medium; width: 380px; margin: 0 auto 0 auto; padding:10px 0 20px 0"> You gave it your best shot at Solidaire! Don't be discouraged, every challenge is a chance to improve. Better luck next time! </p>
+                <button class="new-games" style="width: 150px; height: 50px; font-weight: bold; font-size: large; margin: 0 auto 0 auto; padding:10px 0 10px 0" onclick="init()">
+                    NEW GAME
+                </button>
+            </div> 
+            <div id="jeu">
+                <div>
+                    <table>
+                    <tr>""" + ligne1 + """</tr>
+                    <tr>""" + ligne2 + """</tr>
+                    <tr>""" + ligne3 + """</tr>
+                    <tr>""" + ligne4 + """</tr>
+                    </table>
+                </div>
+                <div id="controles">
+                    <div id="brasser"></div>
+                    <div id="boutton">
+                        <button class="new-games" onclick="init()">NEW GAME</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -261,6 +281,13 @@ def mise_a_jour_affichage():
     # Modification du code HTML pour mettre les cartes en vert et les rendre
     # cliquables
     cartes_vertes(matrice_déplacements)
+    
+    # Game Over Pop Up Logic
+    popUpGameOver = document.querySelector("#pop-up-game-over")
+    greyBackground = document.querySelector("#grey-background")
+    if brasse_restant == 0  and len(matrice_déplacements) == 0:
+        popUpGameOver.setAttribute("style", "position: absolute; top: 30%; left: 50%; transform: translateX(-50%); height: 30vh; width: 500px; background-color: #2E2E2E; flex-direction: column; justify-items: center; text-align: center; justify-content: center; border: 2px solid #F9FFF8; border-radius: 15px; display:flex;")
+        greyBackground.setAttribute("style", " content: ""; position: absolute; background-color: #2E2E2E; opacity: 0.7; width: 100%; height: 100%; top: 0; left: 0;")
 
 
 # La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
@@ -271,15 +298,19 @@ def mise_a_jour_affichage():
 
 def bouton_brasser():
     brasseur = document.querySelector("#brasser")
-
+    popUpWon = document.querySelector("#pop-up-won")
+    greyBackground = document.querySelector("#grey-background")
+    
+    
     # Si le joueur à gagné la partie
     if partie_gagne():
-        brasseur.innerHTML = "You succeeded! Well done!"
+        popUpWon.setAttribute("style", "position: absolute; top: 30%; left: 50%; transform: translateX(-50%); height: 30vh; width: 500px; background-color: #2E2E2E; flex-direction: column; justify-items: center; text-align: center; justify-content: center; border: 2px solid #F9FFF8; border-radius: 15px; display:flex;")
+        greyBackground.setAttribute("style", " content: ""; position: absolute; background-color: #2E2E2E; opacity: 0.7; width: 100%; height: 100%; top: 0; left: 0;")
 
     # Si le joueur n'à plus de brassage de cartes restant
     elif brasse_restant == 0:
-        brasseur.innerHTML = """You can no longer shuffle the cards, GAME OVER"""
-        brasseur.setAttribute("style", "color: red;")
+        brasseur.innerHTML = """You can no longer shuffle the cards"""
+        brasseur.setAttribute("style", "font-weight: bold;")
 
     # Si le joueur à encore des brassages de cartes restant
     else:
