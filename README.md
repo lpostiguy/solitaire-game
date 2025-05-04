@@ -2,6 +2,7 @@
 
 Welcome to my web-based **Solitaire Game**! This is a fun and interactive version of the classic card game built using HTML, CSS, and Python.
 
+<img src="game-preview.png" alt="Game Preview" width="700"/>
 
 ## 🚀 Getting Started
 
@@ -33,8 +34,8 @@ To run the game locally, follow these steps:
 
 ## 🛠️ Built With
 
-- HTML5  
-- CSS3  
+- HTML5
+- CSS3
 - Python3
 
 ## 📄 License
