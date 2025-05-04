@@ -245,7 +245,7 @@ def mise_a_jour_affichage():
                 </button>
             </div>
             <div id="pop-up-game-over">
-                <h1 style="color: #D2000F; font-weight: bold; padding:10px 0 10px 0"> GAME OVER! </h1>
+                <h1 style="color: #973233; font-weight: bold; padding:10px 0 10px 0"> GAME OVER! </h1>
                 <p style="color: #F9FFF8; font-size: medium; width: 380px; margin: 0 auto 0 auto; padding:10px 0 20px 0"> You gave it your best shot at Solidaire! Don't be discouraged, every challenge is a chance to improve. Better luck next time! </p>
                 <button class="new-games" style="width: 150px; height: 50px; font-weight: bold; font-size: large; margin: 0 auto 0 auto; padding:10px 0 10px 0" onclick="init()">
                     NEW GAME
@@ -318,7 +318,7 @@ def bouton_brasser():
             """You can still <button id="brasser_cartes" 
             onclick="brasser_cartes()"> shuffle the cards</button> """
             + str(brasse_restant)
-            + " fois"
+            + " times"
         )
 
 
