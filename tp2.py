@@ -1,9 +1,8 @@
 # Louis-Philippe Ostiguy 20274034
-# Noah Tremblay Taillon 20190661
 # 10 décembre 2023
 #
 # Ce programme, appelé dans un code HTML, permet de modifier ce code HTML afin
-# de lancer une partie d'Addiction Solitaire. Dans ce jeu, le joueur a comme
+# de lancer une partie de Solitaire. Dans ce jeu, le joueur a comme
 # but de placer en ordre de gauche à droite les cartes allant du 2 jusqu'au
 # roi, et ce en les les classant en couleur. Pour gagner, le joueur doit avoir
 # réussis à placer toutes les cartes en ordre. Pour cela, il dispose de trois
@@ -26,7 +25,7 @@ import random
 import math
 
 # La procédure 'init' ne prend pas de paramètre. Elle permet de créer une
-# nouvelle partie d'Addiction Solitaire. Pour ce faire, cette procédure
+# nouvelle partie de Solitaire. Pour ce faire, cette procédure
 # crée un paquet de cartes, avec des nombres de 0 à 51, brasse ce paquet, et
 # associe ces numéros brassés aux noms des cartes correspondantes. Elle
 # appelle la procédure mise_a_jour_affichage, qui permet de lancer le jeu.
@@ -83,51 +82,191 @@ def mise_a_jour_affichage():
     racine.innerHTML = (
         """
     <style>
+    
+        #ecran {
+            background-color: #2E2E2E;
+            height: 100vh;
+        }
          #jeu table {
              float: none;
          }
-
+         
         #jeu table td {
-            border: 0;
+            border: 10px solid #2E2E2E;
+            border-radius: 20px;
             padding: 1px 2px;
-            height: auto;
-            width: auto;
-         }
+            height: 120px;
+            width: 99.05px;
+            background-color: white;
+        }
 
         #jeu table td img {
-            height: 140px;
+            height: 120px;
+            width: 85.05px;
         }
-
-        #jeu {
-            padding-left: 10px;
-        }
-
+            
         #controles {
-            padding-left: 10px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 80%;
             padding-top: 5px;
+        }
+        
+        #small-screen {
+            color: #F9FFF8;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 0 50px 0 50px
+        }
+        
+        #jeu {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 60px;
+        }
+         
+        @media (min-width: 601px) and (max-width: 850px) {
+            #jeu table td {
+                height: 45px;
+                width: 30px;
+            }
+            #jeu table td img {
+                height: 45px;
+                width: 30px;
+            }
+            #controles {
+            width: 60%;
+            }
+            #small-screen {
+                display: none;
+            }
+            #jeu {
+            display: flex;
+            }
+        }
+        
+        @media (min-width: 850px) and (max-width: 1300px) {
+            #jeu table td {
+                height: 70px;
+                width: 50px;
+            }
+            #jeu table td img {
+                height: 70px;
+                width: 50px;
+            }
+            #controles {
+            width: 60%;
+            }
+            #small-screen {
+                display: none;
+            }
+            #jeu {
+            display: flex;
+            }
+        }
+        
+        @media (min-width: 1300px) {
+            #jeu table td {
+            height: 120px;
+            width: 99.05px;
+            }
+            #jeu table td img {
+            height: 120px;
+            width: 85.05px;
+            }
+            #controles {
+            width: 80%;
+            }
+            #small-screen {
+                display: none;
+            }
+            #jeu {
+            display: flex;
+            }
+        }
+        
+        #titre {
+            color: #F9FFF8;
+            background-color: #973233;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         #brasser {
             padding-top: 5px;
             padding-bottom: 5px;
         }
-
-        #boutton {
-            padding-top: 5px;
+        
+        #brasser_cartes {
+            border-radius: 6px;
+            border: none;
+            background-color: #973233;
+            color: #F9FFF8;
+        }
+        
+        .new-games {
+            border-radius: 6px;
+            border: none;
+            background-color: #973233;
+            color: #F9FFF8;
+        }
+        
+        #pop-up-won {
+            display: none;
+        }
+        
+        #pop-up-game-over {
+            display: none;
         }
     </style>
-      <div id="jeu">
-        <table>
-          <tr>""" + ligne1 + """</tr>
-          <tr>""" + ligne2 + """</tr>
-          <tr>""" + ligne3 + """</tr>
-          <tr>""" + ligne4 + """</tr>
-        </table>
-      </div>
-    <div id="controles">
-        <div id="brasser"></div>
-        <div id="boutton">
-            <button id="new-games" onclick="init()">Nouvelle partie</button>
+    <div id="ecran">
+        <div id="titre">
+            <h1>SOLITAIRE</h1>
+        </div>
+        <div id="small-screen">
+            <h3>Screen is to small, try on a bigger device!</h3>
+        </div>
+            <div id="grey-background">
+            </div>
+            <div id="pop-up-won">
+                <h1 style="color: #9BFA79; font-weight: bold; padding:10px 0 10px 0"> YOU WON! </h1>
+                <p style="color: #F9FFF8; font-size: medium; width: 380px; margin: 0 auto 0 auto; padding:10px 0 20px 0"> Congratulations on your win at the Solidaire card game! Keep up the great play and enjoy your victory! </p>
+                <button class="new-games" style="width: 150px; height: 50px; font-weight: bold; font-size: large; margin: 0 auto 0 auto; padding:10px 0 10px 0" onclick="init()">
+                    NEW GAME
+                </button>
+            </div>
+            <div id="pop-up-game-over">
+                <h1 style="color: #973233; font-weight: bold; padding:10px 0 10px 0"> GAME OVER! </h1>
+                <p style="color: #F9FFF8; font-size: medium; width: 380px; margin: 0 auto 0 auto; padding:10px 0 20px 0"> You gave it your best shot at Solidaire! Don't be discouraged, every challenge is a chance to improve. Better luck next time! </p>
+                <button class="new-games" style="width: 150px; height: 50px; font-weight: bold; font-size: large; margin: 0 auto 0 auto; padding:10px 0 10px 0" onclick="init()">
+                    NEW GAME
+                </button>
+            </div> 
+            <div id="jeu">
+                <div>
+                    <table>
+                    <tr>""" + ligne1 + """</tr>
+                    <tr>""" + ligne2 + """</tr>
+                    <tr>""" + ligne3 + """</tr>
+                    <tr>""" + ligne4 + """</tr>
+                    </table>
+                </div>
+                <div id="controles">
+                    <div id="brasser"></div>
+                    <div id="boutton">
+                        <button class="new-games" onclick="init()">NEW GAME</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>""")
 
@@ -142,6 +281,13 @@ def mise_a_jour_affichage():
     # Modification du code HTML pour mettre les cartes en vert et les rendre
     # cliquables
     cartes_vertes(matrice_déplacements)
+    
+    # Game Over Pop Up Logic
+    popUpGameOver = document.querySelector("#pop-up-game-over")
+    greyBackground = document.querySelector("#grey-background")
+    if brasse_restant == 0  and len(matrice_déplacements) == 0:
+        popUpGameOver.setAttribute("style", "position: absolute; top: 30%; left: 50%; transform: translateX(-50%); height: 30vh; width: 500px; background-color: #2E2E2E; flex-direction: column; justify-items: center; text-align: center; justify-content: center; border: 2px solid #F9FFF8; border-radius: 15px; display:flex;")
+        greyBackground.setAttribute("style", " content: ""; position: absolute; background-color: #2E2E2E; opacity: 0.7; width: 100%; height: 100%; top: 0; left: 0;")
 
 
 # La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
@@ -152,22 +298,27 @@ def mise_a_jour_affichage():
 
 def bouton_brasser():
     brasseur = document.querySelector("#brasser")
-
+    popUpWon = document.querySelector("#pop-up-won")
+    greyBackground = document.querySelector("#grey-background")
+    
+    
     # Si le joueur à gagné la partie
     if partie_gagne():
-        brasseur.innerHTML = "Vous avez réussi! Bravo!"
+        popUpWon.setAttribute("style", "position: absolute; top: 30%; left: 50%; transform: translateX(-50%); height: 30vh; width: 500px; background-color: #2E2E2E; flex-direction: column; justify-items: center; text-align: center; justify-content: center; border: 2px solid #F9FFF8; border-radius: 15px; display:flex;")
+        greyBackground.setAttribute("style", " content: ""; position: absolute; background-color: #2E2E2E; opacity: 0.7; width: 100%; height: 100%; top: 0; left: 0;")
 
     # Si le joueur n'à plus de brassage de cartes restant
     elif brasse_restant == 0:
-        brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
+        brasseur.innerHTML = """You can no longer shuffle the cards"""
+        brasseur.setAttribute("style", "font-weight: bold;")
 
     # Si le joueur à encore des brassages de cartes restant
     else:
         brasseur.innerHTML = (
-            """Vous pouvez encore <button id="brasser_cartes" 
-            onclick="brasser_cartes()"> brasser les cartes</button> """
+            """You can still <button id="brasser_cartes" 
+            onclick="brasser_cartes()"> shuffle the cards</button> """
             + str(brasse_restant)
-            + " fois"
+            + " times"
         )
 
 
@@ -183,7 +334,7 @@ def cartes_vertes(matrice):
         # L'indice 0 des sous-tableau de tab contient la carte qui peut
         # être déplacée, qu'il faut mettre en vert
         cas = document.querySelector("#case" + str(i[0]))
-        cas.setAttribute("style", "background-color: lime")
+        cas.setAttribute("style", "background-color: lime; cursor: pointer;")
 
         # Ligne de la matrice contenant l'indice de la case qui peut être
         # bougée et l'indice de l'endroit où elle peut être déplacée
@@ -193,6 +344,7 @@ def cartes_vertes(matrice):
             "onclick",
             "bouger(" + str(cases[0]) + "," + str(cases[1]) + ")",
         )
+
 
 
 # La procédure 'nombres_a_noms' ne prend pas de paramètre. Elle utilise les
@@ -612,73 +764,6 @@ def nombres_a_noms ():
                 # Crée un nouveau tableau mélangé, avec le nom des cartes
                 tab_noms.append(noms_cartes[k])
     return tab_noms
-
-
-# La procédure 'bouton_brasser' ne prend pas de paramètre. Elle utilise le
-# paramètre global brasse_restant, qui contient le nombre de brassages restant
-# au joueur. Cette procédure modifie le code HTML de la page web pour changer
-# l'affichage du bouton brasser; s'il ne reste plus de brassage disponible,
-# le bouton disparait. Sinon, on affiche le bouton avec le compteur.
-
-def bouton_brasser():
-    brasseur = document.querySelector("#brasser")
-    
-    # Si le joueur à gagné la partie
-    if partie_gagne():
-        brasseur.innerHTML = "Vous avez réussi! Bravo!"
-    
-    # Si le joueur n'à plus de brassage de cartes restant
-    elif brasse_restant == 0:
-        brasseur.innerHTML = """Vous ne pouvez plus brasser les cartes"""
-
-    # Si le joueur à encore des brassages de cartes restant
-    else:
-        brasseur.innerHTML = (
-            """Vous pouvez encore <button id="brasser_cartes" 
-            onclick="brasser_cartes()"> brasser les cartes</button> """ 
-            + str(brasse_restant) + " fois")
-
-
-# La procédure 'cartes_vertes' prend en paramètre une matrice. L'élément à 
-# l'indice 0 de chaque ligne de la matrice corresopnd à l'indice d'une carte
-# qui doit être mise en vert. L'indice 1 de chaque ligne correspond à l'indice
-# de la position où cette carte peut être déplacée, si elle est cliquée. Cette
-# procédure modifie le code HTML afin de mettre en vert les cartes qui le 
-# doivent, et leur ajoutent la possibilité d'être déplacées.
-
-def cartes_vertes (matrice):
-    for i in matrice:
-        
-        # L'indice 0 des sous-tableau de tab contient la carte qui peut
-        # être déplacée, qu'il faut mettre en vert
-        cas = document.querySelector("#case" + str(i[0]))
-        cas.setAttribute("style", "background-color: lime")
-
-        # Ligne de la matrice contenant l'indice de la case qui peut être 
-        # bougée et l'indice de l'endroit où elle peut être déplacée
-        cases = i 
-        
-        cas.setAttribute(
-            "onclick",
-            "bouger("
-            + str(cases[0])
-            + ","
-            + str(cases[1])
-            + ")")
-
-
-# La procédure 'bouger' prend en paramètre un indice d'origine et un indice de
-# destination. Elle utilise le tableau global cartes_br et échange l'élément
-# à l'indice d'origne avec l'élément à l'indice de destination. Ensuite,
-# elle met à jour l'affichage du jeu pour prendre en compte cette 
-# modification, en appelant mise_a_jour_affichage..
-
-def bouger(origine, destination):
-    temp = cartes_br[origine]
-    cartes_br[origine] = cartes_br[destination]
-    cartes_br[destination] = temp
-
-    mise_a_jour_affichage()
 
 
 # La fonction voisins_as prend en paramètre un tableau brassé ayant le nom des

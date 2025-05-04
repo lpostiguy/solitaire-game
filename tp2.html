@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="utf-8">
-  <title>Addiction Solitaire</title>
-  <link rel="stylesheet" href="codeboot.bundle.css">
-  <script src="codeboot.bundle.js"></script>
-  <script type="text/python" src="tp2.py"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solitaire Game</title>
+    <link rel="stylesheet" href="codeboot.bundle.css" />
+    <link rel="website icon" type="png" href="cards.png">
+    <script src="codeboot.bundle.js" defer></script>
+    <script type="text/python" src="tp2.py"></script>
 </head>
 
 <body onload="init()">
-  <div id="cb-body"></div>
-</body>
+    <div style="position: absolute; top: 120px; left: 50%; transform: translateX(-50%);">
+        <button
+            style="
+                border-radius: 6px;
+                border: none;
+                background-color: #973233;
+                color: #f9fff8;
+                width: 130px;
+                height: 30px;
+            "
+            id="homePageButton"
+        >
+            Back to Menu
+        </button>
+    </div>
+    <div id="cb-body"></div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function goToHomePage() {
+                window.location.href = "landingExperience.html";
+            }
+            document.getElementById('homePageButton').onclick = goToHomePage;
+        });
+    </script>
+</body>
 </html>
